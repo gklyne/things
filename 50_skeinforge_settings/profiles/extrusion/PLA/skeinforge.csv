@@ -1,0 +1,9 @@
+Format is tab separated skeinforge settings.
+_Name                          	Value
+WindowPosition	996+79
+Open File for Skeinforge	/usr/workspace/github-things/Pulleys/Pulley_T5_8tooth_3off.stl
+analyze	False
+craft	True
+help	False
+meta	False
+profile	False
