@@ -25,3 +25,11 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
+
+#system and general
+*.tmp
+*.log
+*.bak
+*~
+.DS_Store
+
