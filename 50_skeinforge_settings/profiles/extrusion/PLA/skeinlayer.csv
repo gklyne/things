@@ -10,10 +10,10 @@ Draw Arrows	True
 Go Around Extruder Off Travel	False
 Layer (index):	0
 Layer Extra Span (integer):	0
-Line (index):	852
+Line (index):	913
 Display Line	True
 View Move	False
-Scale (pixels per millimeter):	20.0
+Scale (pixels per millimeter):	5.0
 Screen Horizontal Inset (pixels):	100
 Screen Vertical Inset (pixels):	220
 Show Gcode	True
