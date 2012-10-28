@@ -45,7 +45,7 @@ I'll add links here if and when I find them.
         sudo easy_install pip
         sudo pip install pyserial
         sudo apt-get install wx-common
-        sudo api-get install python-pmw python-imaging
+        sudo apt-get install python-pmw python-imaging
 
    The python imaging libraries are installed per `tkinter` install instructions 
    (cf. http://tkinter.unpythonic.net/wiki/How_to_install_Tkinter)
