@@ -1,4 +1,10 @@
-1. Won't boot without SD card and system image.
+These are my sketchy notes for installing the PrintRun RepRap host control software on a Raspberry Pi.
+
+Credit is due to others in the RepRap community for some of the details, 
+but I've lost the various references I used to create these notes.
+I'll add links here if and when I find them.
+
+1. Raspberry Pi won't boot without SD card and system image.
    To load an sd card image from an mage file on Linux:
 
         dd if=<image-file> of=/dev/sdf
