@@ -31,8 +31,8 @@ I'll add links here if and when I find them.
 
 3. Update software package index, and set up for SSH access.
 
-        apt-get update
-        dpkg-reconfigure openssh-server # to generate host keys
+        sudo apt-get update
+        sudo dpkg-reconfigure openssh-server # to generate host keys
 
    From here on, should be able to use network ssh login to run commands.
    This makes it easier to ciut and paste details from browser windows, etc.
@@ -44,8 +44,8 @@ I'll add links here if and when I find them.
         sudo apt-get install python-distribute
         sudo easy_install pip
         sudo pip install pyserial
-        apt-get install wx-common
-        api-get install python-pmw, python-imaging
+        sudo apt-get install wx-common
+        sudo api-get install python-pmw python-imaging
 
    The python imaging libraries are installed per `tkinter` install instructions 
    (cf. http://tkinter.unpythonic.net/wiki/How_to_install_Tkinter)
