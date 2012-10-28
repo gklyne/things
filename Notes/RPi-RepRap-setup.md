@@ -1,10 +1,10 @@
-1. Won't boot without SD card and system image
-   To load sd card image on Linux:
+1. Won't boot without SD card and system image.
+   To load an sd card image from an mage file on Linux:
 
         dd if=<image-file> of=/dev/sdf
 
-   Device name shown here is that for my Dell SD card reader - it may well vary.
-   To find device names, try:
+   The device name shown here is that for my Dell SD card reader - it may well vary.
+   To find device names, try any of the following:
 
         fdisk -l
         cat /proc/partitions
