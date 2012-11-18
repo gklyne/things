@@ -5,7 +5,7 @@ sqrt2 = sqrt(2);
 
 hp    = 150;      // Height of phone
 wp    = 85;       // Width of phone
-dp    = 12;       // Depth opf phone
+dp    = 14;       // Depth opf phone
 dpe   = 8;        // Depth of phone at edge
 
 module Bevel(l,t,orientation)
@@ -73,7 +73,7 @@ module BasePlate(w,h,t,ws,wc)
   x3 = w - x1;
   y1 = wc/2;
   y2 = h - y1;
-  hr = 1.5;
+  hr = 2;
   difference()
   {
     union()
@@ -114,5 +114,5 @@ t=2;
 
 //BasePlate(wp+2*t, hp+2*t, t, 10, 6);
 
-PhoneHolder(wp, hp, dp, t, 10, 6);
+PhoneHolder(wp, hp, dp, t, 10, 5);
 
