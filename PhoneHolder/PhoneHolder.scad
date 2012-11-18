@@ -68,17 +68,27 @@ module AngledStrip(x1,y1,x2,y2,w,t)
 
 module BasePlate(w,h,t,ws,wc)
 {
-  translate([0,0,0]) cube([ws,h,t]);
   x1 = ws - wc/2;
   x2 = w/2;
   x3 = w - x1;
   y1 = wc/2;
   y2 = h - y1;
-  AngledStrip(x1,y1,x2,y2,wc,t);
-  AngledStrip(x1,y2,x2,y1,wc,t);
-  AngledStrip(x2,y1,x3,y2,wc,t);
-  AngledStrip(x2,y2,x3,y1,wc,t);
-  translate([w-ws,0,0]) cube([ws,h,t]);
+  hr = 1.5;
+  difference()
+  {
+    union()
+    {
+      translate([0,0,0]) cube([ws,h,t]);
+      AngledStrip(x1,y1,x2,y2,wc,t);
+      AngledStrip(x1,y2,x2,y1,wc,t);
+      AngledStrip(x2,y1,x3,y2,wc,t);
+      AngledStrip(x2,y2,x3,y1,wc,t);
+      translate([w-ws,0,0]) cube([ws,h,t]);
+    }
+    translate([x1,y2-hr,-delta]) cylinder(r=hr,h=t*2);
+    translate([x2,y2-hr,-delta]) cylinder(r=hr,h=t*2);
+    translate([x3,y2-hr,-delta]) cylinder(r=hr,h=t*2);
+  }
 }
 
 module PhoneHolder(wp,hp,dp,t,ws,wc)
