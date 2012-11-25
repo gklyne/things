@@ -6,7 +6,7 @@ sqrt2 = sqrt(2);
 hp    = 150;      // Height of phone
 wp    = 85;       // Width of phone
 dp    = 14;       // Depth opf phone
-dpe   = 8;        // Depth of phone at edge
+dpe   = 12;       // Depth of phone at edge
 
 module Bevel(l,t,orientation)
 {
@@ -74,6 +74,7 @@ module BasePlate(w,h,t,ws,wc)
   y1 = wc/2;
   y2 = h - y1;
   hr = 2;
+  yh = y2 - (2*hr);
   difference()
   {
     union()
@@ -85,9 +86,9 @@ module BasePlate(w,h,t,ws,wc)
       AngledStrip(x2,y2,x3,y1,wc,t);
       translate([w-ws,0,0]) cube([ws,h,t]);
     }
-    translate([x1,y2-hr,-delta]) cylinder(r=hr,h=t*2);
-    translate([x2,y2-hr,-delta]) cylinder(r=hr,h=t*2);
-    translate([x3,y2-hr,-delta]) cylinder(r=hr,h=t*2);
+    translate([x1,yh,-delta]) cylinder(r=hr,h=t*2,$fn=10);
+    translate([x2,yh,-delta]) cylinder(r=hr,h=t*2,$fn=10);
+    translate([x3,yh,-delta]) cylinder(r=hr,h=t*2,$fn=10);
   }
 }
 
