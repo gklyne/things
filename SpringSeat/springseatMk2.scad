@@ -45,8 +45,8 @@ module springseat(od, id, boltd, totalh, flangeh, helixp, coild, delta)
   ir = id/2;
   br = boltd/2;
   helixh = totalh - flangeh;
-  atwist = 360*helixh/helixp;  // Angle calculated from height and pitch
-  abase  = 360*coild/helixp;   // Solid angle from coil thickness and pitch
+  atwist = -360*helixh/helixp;  // Angle calculated from height and pitch
+  abase  = 360*coild/helixp;    // Solid angle from coil thickness and pitch
   // Main body
   difference()
   {
@@ -63,9 +63,9 @@ module springseat(od, id, boltd, totalh, flangeh, helixp, coild, delta)
   translate([0,0,endh])
   {
     helix(innerd/2+coild, innerd/2-delta, helixh, atwist, abase);
-    rotate([0,0,-45])
+    rotate([0,0,45])
       helix(innerd/2+coild*0.66, innerd/2-delta, helixh, atwist, abase);
-    rotate([0,0,-90])
+    rotate([0,0,90])
       helix(innerd/2+coild*0.33, innerd/2-delta, helixh, atwist, abase);
   }
 }
