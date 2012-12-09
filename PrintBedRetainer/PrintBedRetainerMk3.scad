@@ -5,11 +5,12 @@
 // ft = Flange thicckness
 // ll = lever length
 // lt = lever thickness (width)
+// tilt = tilt angle for clamping affect
 // d  = delta
 
 tilt = 0.75; // reduction in height on shorter side of hub
 
-module PrintBedRetainer(odh, odf, id, rt, ft, ll, lt, d)
+module PrintBedRetainer(odh, odf, id, rt, ft, ll, lt, tilt, d)
 {
     s30 = sin(30);
     c30 = cos(30);
@@ -40,10 +41,12 @@ module PrintBedRetainer(odh, odf, id, rt, ft, ll, lt, d)
                 cylinder(r=lfr, h=rt+2*d);
                 translate([0,-lfr,0]) cube(size=[ll, lfr*2, rt+2*d] );
             }
-            translate([0,0,rt-(tilt*0.5)])
+            translate([0,0,rt-(abs(tilt)*0.5)])
                 rotate([atan(tilt/odh),0,0])
                     translate([0,0,ft/2])
                         cube([odf+ft,odf+ft,ft], center=true);
+            translate([0,0,-d])
+                cylinder(r1=id, r2=0, h=id*0.5);
         }
     }
 }
@@ -52,17 +55,17 @@ module PrintBedRetainer(odh, odf, id, rt, ft, ll, lt, d)
 
 ll = 14;	// Lever length
 
-for (xo = [-ll, ll])
+for (xo = [-1, 1])
 {
-    for ( yo = [-ll, ll])
+    for ( yo = [-1, 1])
     {
-        translate([xo, yo, 0])
-        //              od1  od2 id rt ft  ll lt    d
-        PrintBedRetainer(12,  16, 4, 6, 2, ll, 3, 0.1);
+        translate([ll*xo, ll*yo, 0])
+        //              od1  od2 id rt ft  ll lt             d
+        PrintBedRetainer(12,  16, 4, 6, 2, ll, 3, tilt*yo, 0.1);
     }
 }
 
-////              od1  od2 id rt ft  ll lt    d
-//PrintBedRetainer(12,  16, 4, 6, 2, ll, 3, 0.1);
+////              od1  od2 id rt ft  ll lt          d
+//PrintBedRetainer(12,  16, 4, 6, 2, ll, 3, tilt, 0.1);
 
 
