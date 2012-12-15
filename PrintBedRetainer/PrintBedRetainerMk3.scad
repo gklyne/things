@@ -8,7 +8,7 @@
 // tilt = tilt angle for clamping affect
 // d  = delta
 
-tilt = 0.75; // reduction in height on shorter side of hub
+tilt = 0.85; // reduction in height on shorter side of hub
 
 module PrintBedRetainer(odh, odf, id, rt, ft, ll, lt, tilt, d)
 {
@@ -53,7 +53,7 @@ module PrintBedRetainer(odh, odf, id, rt, ft, ll, lt, tilt, d)
 
 // Actual objects here
 
-ll = 14;	// Lever length
+ll = 15;	// Lever length
 
 for (xo = [-1, 1])
 {
@@ -61,7 +61,7 @@ for (xo = [-1, 1])
     {
         translate([ll*xo, ll*yo, 0])
         //              od1  od2 id rt ft  ll lt             d
-        PrintBedRetainer(12,  16, 4, 6, 2, ll, 3, tilt*yo, 0.1);
+        PrintBedRetainer(13,  18, 4, 6, 2, ll, 4, tilt*yo, 0.1);
     }
 }
 
