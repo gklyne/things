@@ -5,7 +5,7 @@ sqrt2 = sqrt(2);
 
 hp    = 150;      // Height of phone
 wp    = 85;       // Width of phone
-dp    = 14;       // Depth opf phone
+dp    = 14;       // Depth of phone
 dpe   = 12;       // Depth of phone at edge
 
 module Bevel(l,t,orientation)
@@ -68,7 +68,7 @@ module AngledStrip(x1,y1,x2,y2,w,t)
 
 module BasePlate(w,h,t,ws,wc)
 {
-  x1 = ws - wc/2;
+  x1 = ws - wc/3;
   x2 = w/2;
   x3 = w - x1;
   y1 = wc/2;
@@ -94,6 +94,8 @@ module BasePlate(w,h,t,ws,wc)
 
 module PhoneHolder(wp,hp,dp,t,ws,wc)
 {
+  // ws = width of side
+  // wc = width of ...
   translate([-t,-t,-t])  BasePlate(wp+t*2,hp+t*2,t,ws,wc);
 
   translate([-t,0,0])    EdgeClasp(ws,  dp, t, 0);
@@ -111,9 +113,9 @@ module PhoneHolder(wp,hp,dp,t,ws,wc)
 
 //AngledStrip(10,10,20,-40,6,2);
 
-t=2;
+t=2.2;
 
 //BasePlate(wp+2*t, hp+2*t, t, 10, 6);
 
-PhoneHolder(wp, hp, dp, t, 10, 5);
+PhoneHolder(wp, hp, dp, t, 10, 8);
 

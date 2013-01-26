@@ -46,9 +46,12 @@ I'll add links here if and when I find them.
         sudo pip install pyserial
         sudo apt-get install wx-common
         sudo apt-get install python-pmw python-imaging
+        sudo apt-get install python-wxgtk2.8 python-wxtools wx2.8-i18n libwxgtk2.8-dev
 
    The python imaging libraries are installed per `tkinter` install instructions 
    (cf. http://tkinter.unpythonic.net/wiki/How_to_install_Tkinter)
+
+   The wxPython installation is per http://www.raspberrypi.org/phpBB3/viewtopic.php?f=32&t=12185
 
 5. Create working directory/ies for reprap software; e.g.
 
