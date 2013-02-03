@@ -1,4 +1,4 @@
-// Boat desck drain cover
+// Boat deck drain cover
 
 hole_r   = 51;     // Radius of hole
 hole_h   = 62;     // Height of hole
