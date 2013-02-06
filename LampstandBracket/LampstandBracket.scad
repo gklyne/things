@@ -1,6 +1,6 @@
 // Lampstand bracket
 
-r1 = 20/2;     // Central hole
+r1 = 19.5/2;   // Central hole
 r2 = 32/2;     // Hub outer
 r3 = 102/2-5;  // Rim inner
 r4 = 102/2;    // Rim outer
@@ -15,9 +15,9 @@ module tube(r1, r2, t)
 {
   difference()
   {
-    cylinder(r=r2, h=t);
+    cylinder(r=r2, h=t, $fn=48);
     translate([0,0,-d/2])
-      cylinder(r=r1, h=t+d);
+      cylinder(r=r1, h=t+d, $fn=48);
   }
 }
 
@@ -70,7 +70,39 @@ module nutrecessY(x, y1, y2, z, af)
       nutrecessZ(y2-y1, af);
 }
 
-module bracket()
+module splitspoke(cti, cto, a)
+{
+  rotate([0,0,a])
+  {
+    translate([0,0,-d/2])
+    {
+      spoke(0,  r6+d, to+d, 5,   0.1, 0); 
+      spoke(r6, r5+d, to+d, 0.1, 2,   0); 
+    }
+    teardropY(r2+2,  -cto,  cto, to/2, 2);
+    nutrecessY(r2+2, -cto, -cti, to/2, 7.5);
+    nutrecessY(r2+2,  cti,  cto, to/2, 7.5);
+  }
+}
+
+module bracket3()
+{
+  difference()
+  {
+    union()
+    {
+      tube(r1, r2, to);          // Hub
+      tube(r3, r4, to);          // Rim
+      tube(r3, r5, tf);          // Flange
+      spoke(r1, r3+d, to,  8, 12, 120);
+      spoke(r1, r3+d, to,  8, 12, 240);
+      spoke(r1, r3+d, to, 16, 14, 0);
+    }
+    splitspoke(7, 9, 0); 
+  }
+}
+
+module bracket4()
 {
   difference()
   {
@@ -79,19 +111,35 @@ module bracket()
       tube(r1, r2, to);  // Hub
       tube(r3, r4, to);  // Rim
       tube(r3, r5, tf);  // Flange
-      spoke(r1, r3+d, to, 8, 12, 120);
-      spoke(r1, r3+d, to, 8, 12, 240);
-      spoke(r1, r3+d, to, 14, 18,  0);
+      spoke(r1, r3+d, to,  8, 12,  90);
+      spoke(r1, r3+d, to,  8, 12, 270);
+      spoke(r1, r3+d, to, 16, 14,   0);
+      spoke(r1, r3+d, to, 16, 14, 180);
     }
-    translate([0,0,-d/2])
-    {
-      spoke(0,  r6+d, to+d, 3,   0.5, 0); 
-      spoke(r6, r5+d, to+d, 0.5, 2,   0); 
-    }
-    teardropY(r2+2,  -8,  8, to/2, 2);
-    nutrecessY(r2+2, -9, -6, to/2, 7.5);
-    nutrecessY(r2+2,  6,  9, to/2, 7.5);
+    splitspoke(7, 9,   0); 
+    splitspoke(7, 9, 180); 
   }
 }
 
-bracket();
+module bracket2()
+{
+  difference()
+  {
+    union()
+    {
+      tube(r1, r2, to);  // Hub
+      tube(r3, r4, to);  // Rim
+      tube(r3, r5, tf);  // Flange
+      spoke(r1, r3+d, to,  8, 12,  90);
+      spoke(r1, r3+d, to, 16, 14,   0);
+      spoke(r1, r3+d, to, 16, 14, 180);
+    }
+    translate([-(r5+d),-(r5+d),-d/2])
+      cube(size=[(r5+d)*2,r5+d,to+d]);
+    splitspoke(7, 9,   0); 
+    splitspoke(7, 9, 180); 
+  }
+}
+
+translate([0,5,0]) bracket2();
+translate([0,-5,0]) rotate([0,0,180]) bracket2();
