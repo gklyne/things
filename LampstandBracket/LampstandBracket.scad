@@ -2,8 +2,8 @@
 
 r1 = 19.5/2;   // Central hole
 r2 = 32/2;     // Hub outer
-r3 = 102/2-5;  // Rim inner
-r4 = 102/2;    // Rim outer
+r3 = 99.5/2-5; // Rim inner
+r4 = r3+5;     // Rim outer
 r5 = 53;       // Flange outer
 r6 = 30;       // Clamp elbow
 
