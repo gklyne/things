@@ -35,7 +35,7 @@ I'll add links here if and when I find them.
         sudo dpkg-reconfigure openssh-server # to generate host keys
 
    From here on, should be able to use network ssh login to run commands.
-   This makes it easier to ciut and paste details from browser windows, etc.
+   This makes it easier to cut and paste details from browser windows, etc.
 
 4. Get system ready to install printrun host software:
 
@@ -64,7 +64,7 @@ I'll add links here if and when I find them.
 
    See also: http://reprap.org/wiki/Printrun
 
-   It should not be possible to run `pronterface` in the windowing system,
+   It should now be possible to run `pronterface` in the windowing system,
    or `pronsole` from any terminal session (including ssh) to control a connected RepRap.
 
 7. Download and unpack latest copy of Skeinforge from  http://fabmetheus.crsndoo.com/
