@@ -25,7 +25,7 @@ I'll add links here if and when I find them.
    With a network cable, the system pretty much sorts itself out using DHCP, 
    including setting the system time via NTP.
 
-   A second mayboot may be needed to get everything setttled.
+   A second reboot may be needed to get everything setttled.
 
    Login (username `pi`, password `raspberry`)
 
