@@ -1,11 +1,11 @@
 // Drive belt connector
 
-use <../ShapeLibrary/NutRecess.scad>
+use <../ShapeLibrary/NutRecessNoCS.scad>
 use <../ShapeLibrary/CounterSink.scad>
 
 // Tooth profile, tooth centred on origin
 //
-// p = pitch (tooth is half thios)
+// p = pitch (tooth is half this)
 // w = width
 // h = height of tooth (extra is added at base)
 // a = angle of tooth face
@@ -130,10 +130,10 @@ module BeltConnectorClamp(l, w, d, hpy, hd, naf, nt)
     }
 }
 
-BeltConnectorBase(40, 18, 5,   10, 2, 6,   6, 2.5,   33, 12, 3,   5.5, 2);
+BeltConnectorBase(40, 20, 5,   10, 2, 6,   6, 2.5,   33, 12, 3,   5.5, 2);
 
 for ( xo = [ -20, 20 ] )
 {
     translate([xo, -30, 0]) 
-        BeltConnectorClamp(7, 18, 4,  12, 3, 5.5, 2);
+        BeltConnectorClamp(7, 20, 4,  12, 3, 5.5, 2);
 } 
