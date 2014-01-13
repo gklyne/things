@@ -100,8 +100,8 @@ module BeltConnectorBase(l, w, d,  l1, l2, l3, bw, bd,  hpx, hpy, hd,  naf, nt)
         translate([-l1/2-l2,-w/2, 0])
             cube(size=[l1+l2+l2, w, d]) ;
         for ( xo =[-l1/2-l2, l1/2] )
-            translate([xo,-w/2,0])
-                cube(size=[l2, w, d+l2]) ;
+            translate([xo,-w/2+2,0])
+                cube(size=[l2, w-4, d+l2]) ;
     }
 }
 
@@ -118,7 +118,7 @@ module BeltConnectorClamp(l, w, d, hpy, hd, naf, nt)
 {
     difference()
     {
-        translate([-l/2, -w/2, 0]) cube(size=[l, w, d]);
+        translate([-l/2, -w/2, 0]) cube(size=[l, w-1.5, d]);
         for ( yo = [-hpy/2, hpy/2] )
         {
             //translate([0, yo, d]) 
@@ -130,7 +130,7 @@ module BeltConnectorClamp(l, w, d, hpy, hd, naf, nt)
     }
 }
 
-BeltConnectorBase(40, 20, 5,   10, 2, 6,   6, 2.5,   33, 12, 3,   5.5, 2);
+BeltConnectorBase(40, 20, 5,   10, 2, 7,   6, 2.5,   33, 12, 3,   5.5, 2);
 
 for ( xo = [ -20, 20 ] )
 {
