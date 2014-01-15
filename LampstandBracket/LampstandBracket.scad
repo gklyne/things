@@ -5,7 +5,7 @@ r2 = 32/2;     // Hub outer
 r3 = 99.5/2-5; // Rim inner
 r4 = r3+5;     // Rim outer
 r5 = 53;       // Flange outer
-r6 = 30;       // Clamp elbow
+r6 = 25;       // Clamp elbow
 
 to = 15;  // Thickness overall
 tf = 2;   // Tickness flange
@@ -50,7 +50,8 @@ module teardropY(x, y1, y2, z, r)
   }
 }
 
-// Vertical nut recess with base of nut centred on origin 
+// Vertical nut recess with base of nut 
+// centred on origin 
 //
 // af = nut size accross faces
 // oh = overall height of recess
@@ -141,5 +142,7 @@ module bracket2()
   }
 }
 
-translate([0,5,0]) bracket2();
-translate([0,-5,0]) rotate([0,0,180]) bracket2();
+// translate([0,5,0]) bracket2();
+// translate([0,-5,0]) rotate([0,0,180]) bracket2();
+
+Bracket3();
