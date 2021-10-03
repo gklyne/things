@@ -1,9 +1,0 @@
-Format is tab separated skeinforge settings.
-_Name                          	Value
-WindowPosition	754+29
-Open File for Skeinforge	/usr/workspace/github-things/CalibrationObject/CalibrationObject.stl
-analyze	False
-craft	True
-help	False
-meta	False
-profile	False

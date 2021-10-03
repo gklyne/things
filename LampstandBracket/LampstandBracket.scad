@@ -4,8 +4,8 @@ r1 = 19.5/2;   // Central hole
 r2 = 32/2;     // Hub outer
 r3 = 99.5/2-5; // Rim inner
 r4 = r3+5;     // Rim outer
-r5 = 53;       // Flange outer
-r6 = 25;       // Clamp elbow
+r5 = r4+3;     // Flange outer
+r6 = 25+0;     // Clamp elbow
 
 to = 15;  // Thickness overall
 tf = 2;   // Tickness flange
@@ -145,4 +145,4 @@ module bracket2()
 // translate([0,5,0]) bracket2();
 // translate([0,-5,0]) rotate([0,0,180]) bracket2();
 
-Bracket3();
+bracket3();

@@ -1,12 +1,4 @@
-//linear_extrude(height=20, twist=0)
-//{
-//  difference()
-//  {
-//    polygon([[0,0],[0,10],[15,15],[10,0]]);
-//    circle(r=5);
-//  }
-//}
-
+// Fender hook design
 
 w = 45;      // Width top of handrail
 d = 25;      // Depth of heandrail.
@@ -55,6 +47,7 @@ p62 = p3 + [t3,t3];
 p63 = p4 + [-t3,-t3];
 p64 = p5 + [-t3,0];
 
+// Overall profile (outline - hole)
 module HangerProfile()
 {
   difference()
@@ -72,6 +65,7 @@ module HangerProfile()
   }
 }
 
+// Web cutout profile
 module WebProfile()
 {
   polygon([p21,p22,p23,p24]);
@@ -96,6 +90,16 @@ module WebProfile()
 //}
 
 
+//linear_extrude(height=20, twist=0)
+//{
+//  difference()
+//  {
+//    polygon([[0,0],[0,10],[15,15],[10,0]]);
+//    circle(r=5);
+//  }
+//}
+
+// Fender hook (extruded outline - extruded web cutouts)
 difference()
 {
   linear_extrude(height=20, twist=0)
