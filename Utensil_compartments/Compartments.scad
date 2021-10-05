@@ -28,9 +28,13 @@ Latch_cutout_x2   = Latch_cutout_xc - Latch_cutout_w2/2 ;
 Latch_cutout_x3   = Latch_cutout_xc + Latch_cutout_w2/2 ;
 Latch_cutout_x4   = Latch_cutout_xc + Latch_cutout_w1/2 ;
 
+Staple_length     = 30 ;
+Staple_width      = 10 ;
+Staple_ped_d      = 5 ;
+
 // ----- Support -----
 
-module joiner_block(x, y, z) {
+module join_splitter_block(x, y, z) {
     // Define shape for joining a piece split at the X-Z plane
     // - intersect with this shape for one part
     // - difference for the other
@@ -66,6 +70,64 @@ module joiner_block(x, y, z) {
     }
 }
 
+
+module staple(l,w,t,pd,pl) {
+    // Staple for joining split pieces, centred on X-Y plane
+    //
+    // l  = length (Y-axis) of staple
+    // w  = width (X-axis)
+    // t  = thickness (Z-axis)
+    // pd = diameter of peg
+    // pl = length of peg (Z-axis)
+    //
+    translate([0,0,t/2])
+        cube(size=[w,l,t], center=true) ;
+    translate([0,+l/2-w/2,0])
+        cylinder(h=t+pl,d=pd,center=false,$fn=16) ;
+    translate([0,-l/2+w/2,0])
+        cylinder(h=t+pl+delta,d=pd,center=false,$fn=16) ;
+}
+
+module staple_cutout(pl) {
+    staple(Staple_length,Staple_width,Compartment_ft,Staple_ped_d,pl+delta) ;
+}
+
+module staple_cutout_floor(x) {
+    // Staple holes cutout for floor on Z=0, centred around Y=0
+    //
+    // x  = X position of centre
+    translate([x,0,Compartment_ft+Compartment_ft])
+        rotate([0,180,0])
+            staple_cutout(Compartment_ft) ;
+}
+
+module staple_cutout_side_l(x,z) {
+    // Staple holes cutout for left side, centred around Y=0
+    //
+    // x  = X position of centre
+    // z  = Z position of top
+    translate([x+Compartment_ft+Compartment_st,0,z-Staple_width/2])
+        rotate([0,-90,0])
+            staple_cutout(Compartment_st) ;
+}
+
+module staple_cutout_side_r(x,z) {
+    // Staple holes cutout for right side, centred around Y=0
+    //
+    // x  = X position of centre
+    // z  = Z position of top
+    translate([x-Compartment_ft-Compartment_st,0,z-Staple_width/2])
+        rotate([0,+90,0])
+            staple_cutout(Compartment_st) ;
+}
+
+
+// staple_cutout(2) ;
+// staple_cutout_floor(0) ;
+// staple_cutout_side_l(-20,10) ;
+// staple_cutout_side_r(+20,10) ;
+
+
 // ----- Compartment 1 -----
 
 module compartment_1_outline() {
@@ -99,17 +161,28 @@ module compartment_1() {
     linear_extrude(height=Compartment_h)  compartment_sides() ;     // Sides
 }
 
+module compartment_1_holes() {
+    difference() {
+        translate([0,-Compartment_l1/2,0]) compartment_1() ;
+        staple_cutout_floor(Compartment_width/4) ;
+        staple_cutout_floor(Compartment_width*1/4) ;
+        staple_cutout_floor(Compartment_width*3/4) ;
+        staple_cutout_side_l(0,Compartment_h) ;
+        staple_cutout_side_r(Compartment_width,Compartment_h) ;
+    }
+}
+
 module compartment_1_a() {
     intersection() {
-        translate([0,-Compartment_l1/2,0]) compartment_1() ;
-        joiner_block(Compartment_width, Compartment_l1, Compartment_h) ;
-    }    
+        compartment_1_holes() ;
+        join_splitter_block(Compartment_width, Compartment_l1, Compartment_h) ;
+    }
 }
 
 module compartment_1_b() {
     difference() {
-        translate([0,-Compartment_l1/2,0]) compartment_1() ;
-        joiner_block(Compartment_width, Compartment_l1, Compartment_h) ;
+        compartment_1_holes() ;
+        join_splitter_block(Compartment_width, Compartment_l1, Compartment_h) ;
     }    
 }
 
@@ -117,6 +190,11 @@ module compartment_1_split() {
     compartment_1_a() ;
     translate([Compartment_space, Compartment_l1/2, 0])
         compartment_1_b() ;
+    // Staples for joining parts:
+    translate([Compartment_space*2,1*20,0]) staple_cutout(Compartment_ft) ;
+    translate([Compartment_space*2,3*20,0]) staple_cutout(Compartment_ft) ;
+    translate([Compartment_space*2,5*20,0]) staple_cutout(Compartment_st) ;
+    translate([Compartment_space*2,7*20,0]) staple_cutout(Compartment_st) ;
 }
 
 // ----- Compartment 2 -----
@@ -206,15 +284,16 @@ module compartment_3() {
 // ----- Layouts -----
 
 // compartment_3_outline() ;
-// joiner_block(Compartment_width, Compartment_l1, 35) ;
-
+// join_splitter_block(Compartment_width, Compartment_l1, 35) ;
+// staple(30,10,Compartment_ft,5,Compartment_st) ;
 // compartment_1() ;
+// compartment_1_holes() ;
 // compartment_1_a() ;
 // compartment_1_b() ;
-// compartment_1_split() ;
+compartment_1_split() ;
 // compartment_2() ;
 // compartment_2_twice() ;
-compartment_3() ;
+// compartment_3() ;
 
 
 
