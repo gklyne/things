@@ -121,13 +121,6 @@ module staple_cutout_side_r(x,z) {
             staple_cutout(Compartment_st) ;
 }
 
-
-// staple_cutout(2) ;
-// staple_cutout_floor(0) ;
-// staple_cutout_side_l(-20,10) ;
-// staple_cutout_side_r(+20,10) ;
-
-
 // ----- Compartment 1 -----
 
 module compartment_1_outline() {
