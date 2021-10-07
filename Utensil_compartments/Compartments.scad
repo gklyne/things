@@ -6,12 +6,12 @@ Drawer_depth = 372 ;
 Drawer_width = 244 ;
 
 Compartment_width = 81 ;
-Compartment_space = 100 ;
+Compartment_space = 90 ;
 Compartment_l1    = Drawer_depth  ;
 Compartment_l2    = 240 ;
 Compartment_l3    = Drawer_depth - Compartment_l2 ;
 Compartment_w3    = Compartment_width * 2 ;
-Compartment_ft    = 0.8 ;   // Thickness of floor
+Compartment_ft    = 1.5 ;   // Thickness of floor
 Compartment_st    = 2 ;     // Thickness of sides
 Compartment_h     = 35 ;    // Height of sides
 
@@ -28,9 +28,10 @@ Latch_cutout_x2   = Latch_cutout_xc - Latch_cutout_w2/2 ;
 Latch_cutout_x3   = Latch_cutout_xc + Latch_cutout_w2/2 ;
 Latch_cutout_x4   = Latch_cutout_xc + Latch_cutout_w1/2 ;
 
-Staple_length     = 30 ;
-Staple_width      = 10 ;
-Staple_ped_d      = 5 ;
+Staple_length     = 40 ;
+Staple_width      = 20 ;
+Staple_peg_d      = 5 ;
+Staple_peg_hd     = 5.25 ;   // Diameter of peg hole with clearance
 
 // ----- Support -----
 
@@ -45,10 +46,10 @@ module join_splitter_block(x, y, z) {
         linear_extrude(height=z+2*(delta), center=true)
             polygon(
             [
-                [+(x/4-1),+delta],
-                [-(x/4-1),+delta],
-                [-x/4,    -5],
-                [+x/4,    -5],
+                [+(x/4+1),+delta],
+                [-(x/4+1),+delta],
+                [-(x/4-1),    -4],
+                [+(x/4-1),    -4],
             ]) ;
     }
     module key_h() {
@@ -56,10 +57,10 @@ module join_splitter_block(x, y, z) {
             linear_extrude(height=x+2*(delta), center=true)
                 polygon(
                 [
-                    [+(z/4-1),+delta],
-                    [-(z/4-1),+delta],
-                    [-z/4,    -5],
-                    [+z/4,    -5],
+                    [+(z/4+1),+delta],
+                    [-(z/4+1),+delta],
+                    [-(z/4-1),    -4],
+                    [+(z/4-1),    -4],
                 ]) ;
     }
     translate([x/2,0,z/2]) {
@@ -82,23 +83,23 @@ module staple(l,w,t,pd,pl) {
     //
     translate([0,0,t/2])
         cube(size=[w,l,t], center=true) ;
-    translate([0,+l/2-w/2,0])
+    translate([0,+l/2-pd,0])
         cylinder(h=t+pl,d=pd,center=false,$fn=16) ;
-    translate([0,-l/2+w/2,0])
+    translate([0,-l/2+pd,0])
         cylinder(h=t+pl+delta,d=pd,center=false,$fn=16) ;
 }
 
-module staple_cutout(pl) {
-    staple(Staple_length,Staple_width,Compartment_ft,Staple_ped_d,pl+delta) ;
+module staple_cutout(pl,pd) {
+    staple(Staple_length,Staple_width,Compartment_ft,pd,pl+delta*2) ;
 }
 
 module staple_cutout_floor(x) {
     // Staple holes cutout for floor on Z=0, centred around Y=0
     //
     // x  = X position of centre
-    translate([x,0,Compartment_ft+Compartment_ft])
+    translate([x,0,Compartment_ft+Compartment_ft+delta])
         rotate([0,180,0])
-            staple_cutout(Compartment_ft) ;
+            staple_cutout(Compartment_ft,Staple_peg_hd) ;
 }
 
 module staple_cutout_side_l(x,z) {
@@ -106,9 +107,9 @@ module staple_cutout_side_l(x,z) {
     //
     // x  = X position of centre
     // z  = Z position of top
-    translate([x+Compartment_ft+Compartment_st,0,z-Staple_width/2])
+    translate([x+Compartment_ft+Compartment_st+delta,0,z-Staple_width/2])
         rotate([0,-90,0])
-            staple_cutout(Compartment_st) ;
+            staple_cutout(Compartment_st,Staple_peg_hd) ;
 }
 
 module staple_cutout_side_r(x,z) {
@@ -116,9 +117,9 @@ module staple_cutout_side_r(x,z) {
     //
     // x  = X position of centre
     // z  = Z position of top
-    translate([x-Compartment_ft-Compartment_st,0,z-Staple_width/2])
+    translate([x-Compartment_ft-Compartment_st-delta,0,z-Staple_width/2])
         rotate([0,+90,0])
-            staple_cutout(Compartment_st) ;
+            staple_cutout(Compartment_st,Staple_peg_hd) ;
 }
 
 // ----- Compartment 1 -----
@@ -184,10 +185,10 @@ module compartment_1_split() {
     translate([Compartment_space, Compartment_l1/2, 0])
         compartment_1_b() ;
     // Staples for joining parts:
-    translate([Compartment_space*2,1*20,0]) staple_cutout(Compartment_ft) ;
-    translate([Compartment_space*2,3*20,0]) staple_cutout(Compartment_ft) ;
-    translate([Compartment_space*2,5*20,0]) staple_cutout(Compartment_st) ;
-    translate([Compartment_space*2,7*20,0]) staple_cutout(Compartment_st) ;
+    translate([Compartment_space*2.1,1*30,0]) staple_cutout(Compartment_ft,Staple_peg_d) ;
+    translate([Compartment_space*2.1,3*30,0]) staple_cutout(Compartment_ft,Staple_peg_d) ;
+    translate([Compartment_space*2.4,1*30,0]) staple_cutout(Compartment_st,Staple_peg_d) ;
+    translate([Compartment_space*2.4,3*30,0]) staple_cutout(Compartment_st,Staple_peg_d) ;
 }
 
 // ----- Compartment 2 -----
