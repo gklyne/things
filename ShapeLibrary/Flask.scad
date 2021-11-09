@@ -10,8 +10,10 @@ module sphere_cylinder_fillet(sr, cr, fr) {
     fh  = fcz-ftz ;                             // Height of fillet
     translate([0,0,fcz]) {
         difference() {
-            translate([0,0,-fh/2])
-                cube(size=[sr*2, sr*2, fh], center=true) ;
+            // translate([0,0,-fh/2])
+            //     cube(size=[cr*2+fr, cr*2+fr, fh], center=true) ;
+            translate([0,0,-fh])
+                cylinder(r=cr+fr, h=fh) ;
             torus(cr,fr) ;
         }
     }
@@ -28,7 +30,7 @@ module flask_outline(br, nr, nh) {
             }
         }
         translate([0,0,-br])
-            cube(size=[nr*2,nr*2,nr*2], center=true) ;
+            cube(size=[br*2,br*2,br*2], center=true) ;
     }    
 }
 
