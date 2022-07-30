@@ -6,8 +6,8 @@ t_hook_top    = 3 ;
 t_hook_bottom = 3 ;
 t_hook_front  = 3 ;
 l_hook_front  = 6 ;
-l_hook_angled = 12 ;
-a_hook_angled = atan2(10,20) ;
+//l_hook_angled = 12 ;
+//a_hook_angled = atan2(10,20) ; // 26.5
 r_inner       = 4 ;
 r_outer       = r_inner+3 ;
 r_fillet      = 4 ;
@@ -82,10 +82,12 @@ module sossij_x(l, w) {
 // l_inner      is length of inside of hook (height of awning rail)
 // w_inner      is width of inside of hook (thickness of awning rail)
 // w_bottom     ius the width of the bottom hook (not with the angled section)
+// l_angled     length of angled retaining arm at bottom
+// a_angled     angle (deg from horizontal) of retaining arm at bottom
 // t_hook       is the thickness of the hook.
 // l_stub       is overall length of stub for clip at other end.
 //
-module awning_rail_hook(l_inner, w_inner, w_bottom, t_hook, l_stub) {
+module awning_rail_hook(l_inner, w_inner, w_bottom, l_angled, a_angled, t_hook, l_stub) {
     l_overall = l_inner + t_hook_top + t_hook_bottom + l_stub ;
     w_overall = w_inner + t_hook_back + t_hook_front ; 
     difference() {
@@ -109,8 +111,8 @@ module awning_rail_hook(l_inner, w_inner, w_bottom, t_hook, l_stub) {
     // Bottom retainer
     translate([l_inner + t_hook_top + t_hook_bottom/2, t_hook_back + w_bottom,0])
         //cylinder(d=t_hook_bottom, h=t_hook, $fn=32) ;
-        rotate([0,0,90+a_hook_angled])
-            oval_x(l_hook_angled, t_hook_bottom, t_hook) ;
+        rotate([0,0,90+a_angled])
+            oval_x(l_angled, t_hook_bottom, t_hook) ;
 
     // Stub and fillet
     translate([l_inner,0,0])
@@ -180,22 +182,32 @@ t_lower_hook = 3 ;
 l_inner_small  = 37.2 ;
 w_inner_small  = 21 ;
 w_bottom_small = 5 ;
+l_angled_small = 12 ;
+a_angled_small = 27 ;
 t_hook         = 6 ;
 l_stub         = 2 ;
 translate([0,-30,0]) {
-    awning_rail_hook(l_inner_small, w_inner_small, w_bottom_small, t_hook, l_stub) ;
+    awning_rail_hook(
+        l_inner_small, w_inner_small, w_bottom_small, 
+        l_angled_small, a_angled_small, 
+        t_hook, l_stub ) ;
     translate([l_inner_small+t_hook_top+t_hook_bottom+l_stub-delta,0,0])
         lower_hook(l_stub, t_hook, l_taper, l_lower_hook, w_lower_hook, t_lower_hook) ;
 }
 
 // Large awning rail hook
 l_inner_large  = 54 ;
-w_inner_large  = 22 ;
-w_bottom_large = 9 ;
+w_inner_large  = 24 ;
+w_bottom_large = 10 ;
+l_angled_large = 12 ;
+a_angled_large = 32 ;
 //t_hook         = 6 ;
 //l_stub         = 2 ;
 translate([0,5,0]) {
-    awning_rail_hook(l_inner_large, w_inner_large, w_bottom_large, t_hook, l_stub) ;
+    awning_rail_hook(
+        l_inner_large, w_inner_large, w_bottom_large, 
+        l_angled_large, a_angled_large, 
+        t_hook, l_stub ) ;
     translate([l_inner_large+t_hook_top+t_hook_bottom+l_stub-delta,0,0])
         lower_hook(l_stub, t_hook, l_taper, l_lower_hook, w_lower_hook, t_lower_hook) ;
 }
