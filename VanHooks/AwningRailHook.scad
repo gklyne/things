@@ -142,17 +142,20 @@ module simple_hook(l_lower_hook, w_lower_hook, t_lower_hook) {
     translate([0,t_lower_hook/2,0]) {
         oval_x(l_lower_hook, t_lower_hook, t_lower_hook) ;
         translate([l_lower_hook,0,0]) {
-            rotate([0,0,90])
+            rotate([0,0,90]) {
                 sossij_x(w_lower_hook, t_lower_hook) ;
-        }
-        translate([l_lower_hook,w_lower_hook,0]) {
-            rotate([0,0,90+90])
-                sossij_x(w_lower_hook, t_lower_hook) ;
-        }
-        l_lower_retainer = w_lower_hook - t_lower_hook - 1 ;
-        translate([l_lower_hook-w_lower_hook,w_lower_hook,0]) {
-            rotate([0,0,90+90+90])
-                sossij_x(l_lower_retainer, t_lower_hook) ;
+                translate([w_lower_hook,0,0]) {
+                    rotate([0,0,75]) {
+                        l_hook_return = w_lower_hook*0.75 ;
+                        sossij_x(l_hook_return, t_lower_hook) ;
+                        l_lower_retainer = w_lower_hook - t_lower_hook ;
+                        translate([l_hook_return,0,0]) {
+                            rotate([0,0,75])
+                                sossij_x(l_lower_retainer, t_lower_hook) ;
+                        }
+                    }
+                }
+            }
         }
     }
 }
@@ -168,7 +171,7 @@ module lower_hook(l_stub, t_hook, l_taper, l_lower_hook, w_lower_hook, t_lower_h
 // Print
 
 // Small awning rail hook
-l_inner = 38 ;
+l_inner = 37 ;
 w_inner = 21 ;
 t_hook  = 6 ;
 l_stub  = 2 ;
