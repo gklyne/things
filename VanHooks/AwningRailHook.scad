@@ -171,7 +171,7 @@ module lower_hook(l_stub, t_hook, l_taper, l_lower_hook, w_lower_hook, t_lower_h
 // Print
 
 // Small awning rail hook
-l_inner = 37 ;
+l_inner = 37.3 ;
 w_inner = 21 ;
 t_hook  = 6 ;
 l_stub  = 2 ;
