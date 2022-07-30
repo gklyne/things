@@ -7,7 +7,7 @@ t_hook_bottom = 3 ;
 w_hook_bottom = 4 ;
 t_hook_front  = 3 ;
 l_hook_front  = 6 ;
-l_hook_angled = 10 ;
+l_hook_angled = 14 ;
 a_hook_angled = atan2(8,21) ;
 r_inner       = 4 ;
 r_outer       = r_inner+3 ;
@@ -51,24 +51,24 @@ module oval_x(l, w, t) {
 }
 
 
+module ballend_x(l, w) {
+    // Like an oval, but with ball ends.
+    od = w/cos(22.5) ;
+    translate([0,-w/2,0])
+        cube(size=[l, w, w]) ;
+    translate([0,0,w/2])
+        sphere(d=od, $fn=8) ;
+    translate([l,0,w/2])
+        sphere(d=od, $fn=8) ;
+}
+
+
 module sossij_x(l, w) {
     // Like an oval, but with "rounded" cross-section.
     // (actually, octagonal, to allow the overhang to print)
     od = w/cos(22.5) ;
     intersection() {
-        // oval_x(l, w, w) ;
-        union() {
-            translate([0,-w/2,0])
-                cube(size=[l, w, w]) ;
-            translate([0,0,w/2])
-                sphere(d=od, $fn=8) ;
-            translate([l,0,w/2])
-                sphere(d=od, $fn=8) ;
-
-        }
-
-
-
+        ballend_x(l, w) ;
         translate([-w,0,w/2])
             rotate([0,90,0])
                 rotate([0,0,22.5])
@@ -146,8 +146,13 @@ module simple_hook(l_lower_hook, w_lower_hook, t_lower_hook) {
                 sossij_x(w_lower_hook, t_lower_hook) ;
         }
         translate([l_lower_hook,w_lower_hook,0]) {
-            rotate([0,0,90+60])
+            rotate([0,0,90+90])
                 sossij_x(w_lower_hook, t_lower_hook) ;
+        }
+        l_lower_retainer = w_lower_hook - t_lower_hook - 1 ;
+        translate([l_lower_hook-w_lower_hook,w_lower_hook,0]) {
+            rotate([0,0,90+90+90])
+                sossij_x(l_lower_retainer, t_lower_hook) ;
         }
     }
 }
@@ -164,7 +169,7 @@ module lower_hook(l_stub, t_hook, l_taper, l_lower_hook, w_lower_hook, t_lower_h
 
 // Small awning rail hook
 l_inner = 38 ;
-w_inner = 20 ;
+w_inner = 21 ;
 t_hook  = 6 ;
 l_stub  = 2 ;
 awning_rail_hook(l_inner, w_inner, t_hook, l_stub) ;
