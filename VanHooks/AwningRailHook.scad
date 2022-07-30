@@ -6,8 +6,8 @@ t_hook_top    = 3 ;
 t_hook_bottom = 3 ;
 t_hook_front  = 3 ;
 l_hook_front  = 6 ;
-l_hook_angled = 14 ;
-a_hook_angled = atan2(8,21) ;
+l_hook_angled = 12 ;
+a_hook_angled = atan2(10,20) ;
 r_inner       = 4 ;
 r_outer       = r_inner+3 ;
 r_fillet      = 4 ;
@@ -179,7 +179,7 @@ t_lower_hook = 3 ;
 // Small awning rail hook
 l_inner_small  = 37.2 ;
 w_inner_small  = 21 ;
-w_bottom_small = 4 ;
+w_bottom_small = 5 ;
 t_hook         = 6 ;
 l_stub         = 2 ;
 translate([0,-30,0]) {
@@ -190,8 +190,8 @@ translate([0,-30,0]) {
 
 // Large awning rail hook
 l_inner_large  = 54 ;
-w_inner_large  = 25 ;
-w_bottom_large = 6 ;
+w_inner_large  = 22 ;
+w_bottom_large = 9 ;
 //t_hook         = 6 ;
 //l_stub         = 2 ;
 translate([0,5,0]) {
