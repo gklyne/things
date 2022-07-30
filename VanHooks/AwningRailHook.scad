@@ -170,17 +170,30 @@ module lower_hook(l_stub, t_hook, l_taper, l_lower_hook, w_lower_hook, t_lower_h
 
 // Print
 
-// Small awning rail hook
-l_inner = 37.3 ;
-w_inner = 21 ;
-t_hook  = 6 ;
-l_stub  = 2 ;
-awning_rail_hook(l_inner, w_inner, t_hook, l_stub) ;
-
-// Lower
+// Lower hook parameters
 l_taper = 8 ;
 l_lower_hook = 6 ;
 w_lower_hook = 8 ;
 t_lower_hook = 3 ;
-translate([l_inner+t_hook_top+t_hook_bottom+l_stub-delta,0,0])
-    lower_hook(l_stub, t_hook, l_taper, l_lower_hook, w_lower_hook, t_lower_hook) ;
+
+// Small awning rail hook
+l_inner_small = 37.2 ;
+w_inner_small = 21 ;
+t_hook        = 6 ;
+l_stub        = 2 ;
+translate([0,-30,0]) {
+    awning_rail_hook(l_inner_small, w_inner_small, t_hook, l_stub) ;
+    translate([l_inner_small+t_hook_top+t_hook_bottom+l_stub-delta,0,0])
+        lower_hook(l_stub, t_hook, l_taper, l_lower_hook, w_lower_hook, t_lower_hook) ;
+}
+
+// Large awning rail hook
+l_inner_large = 52.5 ;
+w_inner_large = 27 ;
+//t_hook        = 6 ;
+//l_stub        = 2 ;
+translate([0,5,0]) {
+    awning_rail_hook(l_inner_large, w_inner_large, t_hook, l_stub) ;
+    translate([l_inner_large+t_hook_top+t_hook_bottom+l_stub-delta,0,0])
+        lower_hook(l_stub, t_hook, l_taper, l_lower_hook, w_lower_hook, t_lower_hook) ;
+}
