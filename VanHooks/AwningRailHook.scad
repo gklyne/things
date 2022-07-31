@@ -186,14 +186,14 @@ l_angled_small = 12 ;
 a_angled_small = 27 ;
 t_hook         = 6 ;
 l_stub         = 2 ;
-translate([0,-30,0]) {
-    awning_rail_hook(
-        l_inner_small, w_inner_small, w_bottom_small, 
-        l_angled_small, a_angled_small, 
-        t_hook, l_stub ) ;
-    translate([l_inner_small+t_hook_top+t_hook_bottom+l_stub-delta,0,0])
-        lower_hook(l_stub, t_hook, l_taper, l_lower_hook, w_lower_hook, t_lower_hook) ;
-}
+//translate([0,-30,0]) {
+//    awning_rail_hook(
+//        l_inner_small, w_inner_small, w_bottom_small, 
+//        l_angled_small, a_angled_small, 
+//        t_hook, l_stub ) ;
+//    translate([l_inner_small+t_hook_top+t_hook_bottom+l_stub-delta,0,0])
+//        lower_hook(l_stub, t_hook, l_taper, l_lower_hook, w_lower_hook, t_lower_hook) ;
+//}
 
 // Large awning rail hook
 l_inner_large  = 53 ;
