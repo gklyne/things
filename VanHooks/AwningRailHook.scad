@@ -198,9 +198,9 @@ translate([0,-30,0]) {
 // Large awning rail hook
 l_inner_large  = 53 ;
 w_inner_large  = 24 ;
-w_bottom_large = 10 ;
+w_bottom_large = 9 ;
 l_angled_large = 12 ;
-a_angled_large = 36 ;
+a_angled_large = 38 ;
 //t_hook         = 6 ;
 //l_stub         = 2 ;
 translate([0,5,0]) {
