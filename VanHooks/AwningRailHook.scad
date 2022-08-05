@@ -75,6 +75,22 @@ module sossij_x(l, w) {
     }
 }
 
+module sossij_bend_x_y(n, l_seg, t_seg, a_seg) {
+    // Make rough curve from n segments of length l__seg, thickness t_seq,
+    // with angle a_seg between segments
+    sossij_x(l_seg, t_seg) ;
+    translate([l_seg,0,0]) {
+        rotate([0,0,a_seg]) {
+            if (n>0) {
+                sossij_bend_x_y(n-1, l_seg, t_seg, a_seg) 
+                    children() ;
+
+            } else {
+                children() ;
+            }
+        }
+    }
+}
 
 // Awning rail hook, with upper inner corner on the origin, and
 // inner back of hook extending along the X axis
@@ -170,6 +186,36 @@ module lower_hook(l_stub, t_hook, l_taper, l_lower_hook, w_lower_hook, t_lower_h
         simple_hook(l_lower_hook, w_lower_hook, t_lower_hook) ;
 }
 
+
+module simple_hook_curved(l_lower_hook, w_lower_hook, t_lower_hook) {
+    translate([0,t_lower_hook/2,0]) {
+        oval_x(l_lower_hook, t_lower_hook, t_lower_hook) ;
+        l_seg = w_lower_hook/6 ;
+        t_seg = t_lower_hook ;
+        a_seg = 15 ;    // * 6 = 90 degrees
+        translate([l_lower_hook,0,0]) {
+            rotate([0,0,90]) {
+                sossij_x(w_lower_hook*0.9, t_lower_hook) ;
+                translate([w_lower_hook*0.9,0,0]) {
+                    sossij_bend_x_y(9, l_seg, t_seg, a_seg)
+                         sossij_bend_x_y(7, l_seg*2, t_seg, -a_seg) ;
+
+                }
+            }
+        }
+    }
+}
+
+module lower_hook_curved(l_stub, t_hook, l_taper, l_lower_hook, w_lower_hook, t_lower_hook) {
+    cube(size=[l_stub+delta,t_hook_back,t_hook]) ;
+    translate([l_stub,0,0])
+        tapered_cuboid(l_taper+delta, t_hook_back, t_hook, t_lower_hook, t_lower_hook) ;
+    translate([l_stub+l_taper,0,0])
+        simple_hook_curved(l_lower_hook, w_lower_hook, t_lower_hook) ;
+}
+
+
+
 // Print
 
 // Lower hook parameters
@@ -186,14 +232,21 @@ l_angled_small = 12 ;
 a_angled_small = 27 ;
 t_hook         = 6 ;
 l_stub         = 2 ;
-//translate([0,-30,0]) {
-//    awning_rail_hook(
-//        l_inner_small, w_inner_small, w_bottom_small, 
-//        l_angled_small, a_angled_small, 
-//        t_hook, l_stub ) ;
-//    translate([l_inner_small+t_hook_top+t_hook_bottom+l_stub-delta,0,0])
-//        lower_hook(l_stub, t_hook, l_taper, l_lower_hook, w_lower_hook, t_lower_hook) ;
-//}
+translate([0,-30,0]) {
+    awning_rail_hook(
+        l_inner_small, w_inner_small, w_bottom_small, 
+        l_angled_small, a_angled_small, 
+        t_hook, l_stub ) ;
+
+    // Angled lower hook:
+    // translate([l_inner_small+t_hook_top+t_hook_bottom+l_stub-delta,0,0])
+    //     lower_hook(l_stub, t_hook, l_taper, l_lower_hook, w_lower_hook, t_lower_hook) ;
+
+    // Curved lower hook
+    l_curved_hook = l_lower_hook + w_lower_hook*2 ;
+    translate([l_inner_small+t_hook_top+t_hook_bottom+l_stub-delta,0,0])
+        lower_hook_curved(l_stub, t_hook, l_taper, l_curved_hook, w_lower_hook, t_lower_hook) ;
+}
 
 // Large awning rail hook
 l_inner_large  = 53 ;
@@ -208,6 +261,14 @@ translate([0,5,0]) {
         l_inner_large, w_inner_large, w_bottom_large, 
         l_angled_large, a_angled_large, 
         t_hook, l_stub ) ;
+
+    // Angled lower hook:
+    // translate([l_inner_large+t_hook_top+t_hook_bottom+l_stub-delta,0,0])
+    //     lower_hook(l_stub, t_hook, l_taper, l_lower_hook, w_lower_hook, t_lower_hook) ;
+
+    // Curved lower hook
+    l_curved_hook = l_lower_hook + w_lower_hook*2 ;
     translate([l_inner_large+t_hook_top+t_hook_bottom+l_stub-delta,0,0])
-        lower_hook(l_stub, t_hook, l_taper, l_lower_hook, w_lower_hook, t_lower_hook) ;
+        lower_hook_curved(l_stub, t_hook, l_taper, l_curved_hook, w_lower_hook, t_lower_hook) ;
+
 }
