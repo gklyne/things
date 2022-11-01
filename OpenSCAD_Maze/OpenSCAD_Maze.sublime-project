@@ -1,0 +1,18 @@
+{
+	/*"folders":
+	[
+		{
+			"path": "/Users/graham/annalist_site",
+		},
+	],*/
+	"settings":
+	{
+		"show_errors_inline": false,
+	},
+	"folders":
+	[
+		{
+			"path": ".",
+		}
+	],
+}
