@@ -377,26 +377,46 @@ module mesh_45_xy(x, y, t, wm, wh) {
     // wm   = width of the mesh strips
     // wh   = width of holes between the strips
     //
-    lm = x + y ;                // Over-length of mesh strips
-    pm = (wm+wh)/sqrt2 ;        // Pitch of mesh strips (X/Y direction)
-    nm = round(max(x,y) / pm) ;  // Number of mesh strips
-    bm = pm*nm/2 ;              // Mesh bounds (X and Y)
+    lm  = x + y ;                       // Over-length of mesh strips
+    pm  = wm+wh ;                       // Diagonal mesh pitch
+    pxy = pm/sqrt2 ;                    // X/Y direction half-pitch of mesh
+    nm  = floor(max(x,y)/pxy) ;         // Number of mesh strips
+    bm  = pxy*nm ;                      // Mesh bounds (X and Y)
+    ny  = ceil((y+pxy*0.9)/(pxy*2)) ;   // Mesh holes to first infill
+    shift_x1 = ((ny)%2)*pxy ;
+    shift_x2 = pxy - shift_x1 ;
+    shift_y1 = (ny-1)*pxy ;
+    shift_y2 = (ny)*pxy ;
+
     module strip(dir) {
         rotate([0,0,dir*45])
             translate([0,0,t/2])
                 cube(size=[lm,wm,t], center=true) ;
-    }    
+    }
+
+    module infill() {
+        translate([0,0,t/2])
+            rotate([0,0,45])
+                cube(size=[pm, pm, t], center=true) ;
+        }
+
     intersection() {
         translate([0,0,t/2])
             cube(size=[x,y,t], center=true) ;
-        for (o=[-bm : pm : bm]) {
-            translate([o, -o, 0]) strip(+1) ;
-            translate([o,  o, 0]) strip(-1) ;
+        union() {
+            for (o=[-bm : pxy*2 : bm]) {
+                translate([o, 0, 0]) strip(+1) ;
+                translate([o, 0, 0]) strip(-1) ;
+                // Infill top rows of mesh holes, to maintain 45 degree print overhang
+                translate([o+shift_x1, shift_y1, 0]) infill() ;
+                translate([o+shift_x2, shift_y2, 0]) infill() ;
+            }
+            //mesh_45_xy_top_infill(x, y, t, wm, wh) ;
         }
     }
 }
 ////-mesh_45_xy(x, y, t, wm, wh)-
-// mesh_45_xy(50, 30, 2, 2, 5) ;
+//mesh_45_xy(60, 62, 2, 2, 6) ;
 
 
 module mesh_45_xz(x, z, t, wm, wh) {
@@ -482,23 +502,23 @@ module bottom_edge_x_bevel(l, w, b, t) {
 module bottom_edge_x_square_bevel(ls, lb, w, b, t) {
     // Bottom square-to-bevelled transition edge on X-axis, facing towards +Y axis
     //
-    // ls  = length of square edge (thickness of bevel end is added)
+    // ls  = length of square edge (thickness of bevel end is included)
     // lb  = length of bevelled edge
     // w   = width /height of edge
     // b   = height/width of bevel
     // t   = thickness of walls
     //
-    bottom_edge_x_square(ls+t, w, t) ;
-    translate([ls,0,0]) {
+    bottom_edge_x_square(ls, w, t) ;
+    translate([ls-t,0,0]) {
         linear_extrude_x(height=t)
             offset(r=t, $fn=12)
                 offset(delta=-t)
                     bevel_end_outline(b+t) ;
-        bottom_edge_x_bevel(lb, w, b, t) ;
+        bottom_edge_x_bevel(lb+t, w, b, t) ;
     }
 }
 ////-bottom_edge_x_square_bevel(ls, lb, w, b, t)-
-//bottom_edge_x_square_bevel(25, 25, 20, 10, 2) ;
+//bottom_edge_x_square_bevel(30, 20, 20, 10, 2) ;
 
 
 module bottom_edge_x_bevel_square(lb, ls, w, b, t) {
@@ -746,13 +766,13 @@ module side_face_xz(x, z, wb, ht, t) {
     wh = 6 ;
     mx = x-wb*2 ;
     mz = z-wb-ht ;
-    translate([x/2,0,(z+wb-ht)/2])
-        mesh_45_xz(mx+t*2, mz+t*2, t, wm, wh) ;
+    translate([x/2,0,(z+wb-ht-t)/2])
+        mesh_45_xz(mx+t*2, mz+t+delta, t, wm, wh) ;
     translate([x/2,t/2,z-ht/2])
         cube(size=[mx+t*2,t,ht], center=true) ;
 }
 ////-side_face_xz(x, z, wb, ht, t)-
-//side_face_xz(80, 60, 15, 10, 2) ;
+//side_face_xz(80, 61, 15, 5, 2) ;
 
 
 module side_face_yz(y, z, wb, ht, t) {
