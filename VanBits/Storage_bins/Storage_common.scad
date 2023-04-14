@@ -753,6 +753,7 @@ module bottom_face(x, y, w, t) {
         cube(size=[x-w*2+t*2, y-w*2+t*2, t]) ;
 }
 
+
 module side_face_xz(x, z, wb, ht, t) {
     // Side face of storage box, excluding bottom edges.
     //
@@ -762,8 +763,8 @@ module side_face_xz(x, z, wb, ht, t) {
     // ht   = height of top edge
     // t    = thickness of face
     //
-    wm = 2 ;
-    wh = 6 ;
+    wm = 2.5 ;
+    wh = 7.5 ;
     mx = x-wb*2 ;
     mz = z-wb-ht ;
     translate([x/2,0,(z+wb-ht-t)/2])
@@ -787,6 +788,69 @@ module side_face_yz(y, z, wb, ht, t) {
     flip_x_y()
         side_face_xz(y, z, wb, ht, t) ;
 }
+
+
+module front_top_edge_cutout_outline(w, h, hc, wc) {
+    oc = (h - hc) ;
+    hw = w/2 ;
+    polygon(
+        [
+            [-hw,0],
+            [ hw,0],
+            [ hw,h],
+            [ hw-oc,h],
+            [ hw-oc-hc,h-hc],
+            [ oc+hc-hw,h-hc],
+            [ oc-hw,h],
+            [-hw,h],
+            [-hw,0],
+        ]) ;
+    
+}
+
+module front_top_edge_cutout(w, h, t, ht, hc) {
+    translate([0,0,h/2-ht])
+        flip_y_z()
+            linear_extrude(height=t)
+                offset(r=t, $fn=12)
+                    offset(delta=-t)
+                        front_top_edge_cutout_outline(w, ht, hc, w-(h-hc)/2) ;
+}
+
+
+module side_face_xz_cutout(x, z, wb, ht, hc, t) {
+    // Side face of storage box, excluding bottom edges,
+    // with lowered front cutout
+    //
+    // x    = overall X dimension of box
+    // z    = overall Z dimension of box
+    // wb   = width/height of bottom edges
+    // ht   = height of top edge (including cutout)
+    // hc   = height of cutout lowering top edge
+    // t    = thickness of face
+    //
+    wm = 2.5 ;
+    wh = 7.5 ;
+    mx = x-wb*2 ;
+    mz = z-wb-ht+t ;
+    translate([x/2,0,z/2]) {
+        translate([0,0,(wb-ht)/2])
+            mesh_45_xz(mx+t*2, mz+t+delta, t, wm, wh) ;
+    }
+    // translate([x/2,0,(z+wb-ht)/2-t]) {
+    translate([x/2,0,z/2]) {
+        front_top_edge_cutout(mx+t*2, z, t, ht, hc) ;
+    }
+}
+////-side_face_xz_cutout(x, z, wb, ht, hc, t)-
+//translate([0,-20,0])
+//side_face_xz_cutout(100, 60, 15, 20, 16, 2) ;
+//side_face_xz_cutout(220, 60, 25, 20, 16, 2) ;
+
+// # cube(size=[25,2,60]) ;
+// # cube(size=[40,2,25]) ;
+// translate([0,-1,60-20])
+//     # cube(size=[40,2,20]) ;
 
 
 // -----------------------------------------------------------------------------

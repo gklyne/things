@@ -2,9 +2,9 @@
 
 include <Storage_common.scad>
 
-module storage_left_left(wid, dep, hgt) {
+module storage_left_left(wid, dep, hgt, b_wid) {
     wb = 25 ;
-    ht = 6 ;
+    ht = 5 ;
     b  = 21 ;
     t  = 2 ;
     
@@ -44,8 +44,8 @@ module storage_left_left(wid, dep, hgt) {
         bottom_corner_xyz_bevelled(wb, b, t) ;
         corner_edge_z_bevelled(hgt, wb, b, t) ;
         translate([wb-t,0,0]) {
-            lb = 60-wb ;
-            ls = wid-lb-wb*2+t*2 ;
+            lb = b_wid-wb+t ;
+            ls = wid-lb-wb*2+t ;
             bottom_edge_x_bevel_square(lb, ls, wb, b, t) ;
             ////bottom_edge_x_square(wid-wb*2+t*2, wb, t) ;
             }
@@ -58,4 +58,5 @@ module storage_left_left(wid, dep, hgt) {
     }
 }
 ////-storage_left_left(wid, dep, hgt)-
-storage_left_left(185, 122, 90) ;
+// storage_left_left(185, 122, 90) ;
+storage_left_left(165, 122, 80, 60) ;
