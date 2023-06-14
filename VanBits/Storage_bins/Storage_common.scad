@@ -350,19 +350,6 @@ module round_ended_cylinder(h, r) {
 ////-round_ended_cylinder(h, r)-
 //round_ended_cylinder(20,2) ;
 
-//@@@@
-//module round_corner_xy(h, r) {
-//    // *** Use round_off_z instead ***
-//    translate([r,r,0])
-//        difference() {
-//            round_ended_cylinder(h, r) ;
-//            cube(size=[r,r,h+2*delta]) ;
-//        }
-//}
-////-round_corner_xy(h, r)-
-//round_corner_xy(20,2) ;
-//@@@@
-
 
 // -----------------------------------------------------------------------------
 // Surface utility functions and modules
@@ -538,21 +525,23 @@ module bottom_edge_x_bevel_square(lb, ls, w, b, t) {
 //bottom_edge_x_bevel_square(25, 25, 20, 10, 2) ;
 
 
-module corner_edge_z_square(h, w, t) {
+module corner_edge_z_square(h, hb, wx, wy, t) {
     // Corner edge on the Z axis, extending towards +X, +Y axes
     //
     // h    = overall height of corner edge
-    // w    = width/height of bottom edges
+    // hb   = height of base edge
+    // wx   = width of corner in X direction edges
+    // wy   = width of corner in Y direction edges
     // t    = thickness of sides
     //
-    translate([0,0,w-t])
+    translate([0,0,hb-t])
         round_off_z(h, t) {
-            cube(size=[w,t,h-w+t]) ;
-            cube(size=[t,w,h-w+t]) ;
+            cube(size=[wx,t,h-hb+t]) ;
+            cube(size=[t,wy,h-hb+t]) ;
         }
 }
-////-corner_edge_z_square(h, w, t)-
-//corner_edge_z_square(60, 10, 2) ;
+////-corner_edge_z_square(h, hb, wx, wy, t)-
+//corner_edge_z_square(60, 10, 10, 10, 2) ;
 
 
 module corner_edge_z_bevelled(h, w, b, t) {
@@ -754,39 +743,43 @@ module bottom_face(x, y, w, t) {
 }
 
 
-module side_face_xz(x, z, wb, ht, t) {
+module side_face_xz(x, z, hb, wl, wr, ht, t) {
     // Side face of storage box, excluding bottom edges.
     //
     // x    = overall X dimension of box
     // z    = overall Z dimension of box
-    // wb   = width/height of bottom edges
+    // hb   = height of bottom corner edge
+    // wl   = width of left corner edge
+    // wr   = width of right corner edge
     // ht   = height of top edge
     // t    = thickness of face
     //
     wm = 2.5 ;
     wh = 7.5 ;
-    mx = x-wb*2 ;
-    mz = z-wb-ht ;
-    translate([x/2,0,(z+wb-ht-t)/2])
+    mx = x-wl-wr ;
+    mz = z-hb-ht ;
+    translate([(x+wl-wr)/2,0,(z+hb-ht-t)/2])
         mesh_45_xz(mx+t*2, mz+t+delta, t, wm, wh) ;
-    translate([x/2,t/2,z-ht/2])
+    translate([(x+wl-wr)/2,t/2,z-ht/2])
         cube(size=[mx+t*2,t,ht], center=true) ;
 }
-////-side_face_xz(x, z, wb, ht, t)-
-//side_face_xz(80, 61, 15, 5, 2) ;
+////-side_face_xz(x, z, hb, wl, wr, ht, t)-
+//side_face_xz(80, 61, 15, 15, 5, 2) ;
 
 
-module side_face_yz(y, z, wb, ht, t) {
+module side_face_yz(y, z, wb, wr, wl, ht, t) {
     // Side face of storage box, excluding bottom edges.
     //
     // y    = overall Y dimension of box
     // z    = overall Z dimension of box
-    // wb   = width/height of bottom edges
+    // hb   = height of bottom corner edge
+    // wl   = width of left corner edge
+    // wr   = width of right corner edge
     // ht   = height of top edge
     // t    = thickness of face
     //
     flip_x_y()
-        side_face_xz(y, z, wb, ht, t) ;
+        side_face_xz(y, z, wb, wr, wl, ht, t) ;
 }
 
 
@@ -818,34 +811,35 @@ module front_top_edge_cutout(w, h, t, ht, hc) {
 }
 
 
-module side_face_xz_cutout(x, z, wb, ht, hc, t) {
+module side_face_xz_cutout(x, z, hb, wl, wr, ht, hc, t) {
     // Side face of storage box, excluding bottom edges,
     // with lowered front cutout
     //
     // x    = overall X dimension of box
     // z    = overall Z dimension of box
-    // wb   = width/height of bottom edges
+    // hb   = height of base corner edges
+    // wl   = width of left corner edge
+    // wr   = width of right corner edge
     // ht   = height of top edge (including cutout)
     // hc   = height of cutout lowering top edge
     // t    = thickness of face
     //
     wm = 2.5 ;
     wh = 7.5 ;
-    mx = x-wb*2 ;
-    mz = z-wb-ht+t ;
+    mx = x-wl-wr ;
+    mz = z-hb-ht+t ;
     translate([x/2,0,z/2]) {
-        translate([0,0,(wb-ht)/2])
+        translate([0,0,(hb-ht)/2])
             mesh_45_xz(mx+t*2, mz+t+delta, t, wm, wh) ;
     }
-    // translate([x/2,0,(z+wb-ht)/2-t]) {
+    // translate([x/2,0,(z+hb-ht)/2-t]) {
     translate([x/2,0,z/2]) {
         front_top_edge_cutout(mx+t*2, z, t, ht, hc) ;
     }
 }
-////-side_face_xz_cutout(x, z, wb, ht, hc, t)-
+////-side_face_xz_cutout(x, z, hb, wl, wr, ht, hc, t)-
 //translate([0,-20,0])
-//side_face_xz_cutout(100, 60, 15, 20, 16, 2) ;
-//side_face_xz_cutout(220, 60, 25, 20, 16, 2) ;
+//side_face_xz_cutout(220, 60, 25, 25, 25, 20, 16, 2) ;
 
 // # cube(size=[25,2,60]) ;
 // # cube(size=[40,2,25]) ;
@@ -875,29 +869,29 @@ module sample_box(wid, dep, hgt) {
     // Back
     transform_edge_x_back(0, dep) {
         bottom_corner_x_square_y_bevelled(wb, b, t) ;
-        corner_edge_z_square(hgt, wb, t) ;
+        corner_edge_z_square(hgt, wb, wb, wb, t) ;
         translate([wb-t,0,0])
             bottom_edge_x_square(wid-wb*2+t*2, wb, t) ;
-        side_face_xz(wid, hgt, wb, ht, t) ;
+        side_face_xz(wid, hgt, wb, wb, wb, ht, t) ;
         translate([wid,0,0])
             rotate([0,0,90]) {
                 bottom_corner_xy_square(wb, t) ;
-                corner_edge_z_square(hgt, wb, t) ;
+                corner_edge_z_square(hgt, w, wb, wb, t) ;
             }
     }
 
     // Left
     transform_edge_x_left(0, 0) {
         translate([wb,0,0])
-            bottom_edge_x_bevel(dep-wb*2+t*2, wb, b, t) ;
-        side_face_xz(dep, hgt, wb, ht, t) ;
+            bottom_edge_x_bevel(dep-wb*2+t*2, wb, wb, wb, b, t) ;
+        side_face_xz(dep, hgt, wb, wb, wb, ht, t) ;
     }
 
     // Right
     transform_edge_x_right(wid, 0) {
         translate([wb,0,0])
             bottom_edge_x_square(dep-wb*2+t*2, wb, t) ;
-        side_face_xz(dep, hgt, wb, ht, t) ;
+        side_face_xz(dep, hgt, wb, wb, wb, ht, t) ;
     }
 
     // Front
@@ -910,11 +904,11 @@ module sample_box(wid, dep, hgt) {
             bottom_edge_x_bevel_square(lb, ls, wb, b, t) ;
             ////bottom_edge_x_square(wid-wb*2+t*2, wb, t) ;
             }
-        side_face_xz(wid, hgt, wb, ht, t) ;
+        side_face_xz(wid, hgt, wb, wb, wb, ht, t) ;
         translate([wid,0,0])
             rotate([0,0,90]) {
                 bottom_corner_xy_square(wb, t) ;
-                corner_edge_z_square(hgt, wb, t) ;
+                corner_edge_z_square(hgt, wb, wb, wb, t) ;
             }
     }
 }

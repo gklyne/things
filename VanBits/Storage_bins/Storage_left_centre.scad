@@ -3,7 +3,8 @@
 include <Storage_common.scad>
 
 module storage_left_center(wid, dep, hgt, ht, hc) {
-    wb = 25 ;
+    //wb = 25-15 ;
+    wb = ht*2 ;
     t  = 2 ;
     
     // Bottom
@@ -12,14 +13,14 @@ module storage_left_center(wid, dep, hgt, ht, hc) {
     // Back
     transform_edge_x_back(0, dep) {
         bottom_corner_xy_square(wb, t) ;
-        corner_edge_z_square(hgt, wb, t) ;
+        corner_edge_z_square(hgt, wb, ht, ht, t) ;
         translate([wb-t,0,0])
             bottom_edge_x_square(wid-wb*2+t*2, wb, t) ;
-        side_face_xz(wid, hgt, wb, ht-hc, t) ;
+        side_face_xz(wid, hgt, wb, ht, ht, ht, t) ;
         translate([wid,0,0])
             rotate([0,0,90]) {
                 bottom_corner_xy_square(wb, t) ;
-                corner_edge_z_square(hgt, wb, t) ;
+                corner_edge_z_square(hgt, wb, ht, ht, t) ;
             }
     }
 
@@ -27,32 +28,32 @@ module storage_left_center(wid, dep, hgt, ht, hc) {
     transform_edge_x_left(0, 0) {
         translate([wb,0,0])
             bottom_edge_x_square(dep-wb*2+t*2, wb, t) ;
-        side_face_xz(dep, hgt, wb, ht-hc, t) ;
+        side_face_xz(dep, hgt, wb, ht, ht, ht, t) ;
     }
 
     // Right
     transform_edge_x_right(wid, 0) {
         translate([wb,0,0])
             bottom_edge_x_square(dep-wb*2+t*2, wb, t) ;
-        side_face_xz(dep, hgt, wb, ht-hc, t) ;
+        side_face_xz(dep, hgt, wb, ht, ht, ht, t) ;
     }
 
     // Front
     transform_edge_x_front(0, 0) {
         bottom_corner_xy_square(wb, t) ;
-        corner_edge_z_square(hgt, wb, t) ;
+        corner_edge_z_square(hgt, wb, ht, ht, t) ;
         translate([wb-t,0,0]) {
             bottom_edge_x_square(wid-wb*2+t*2, wb, t) ;
             }
         //side_face_xz(wid, hgt, wb, ht, t) ;
-        side_face_xz_cutout(wid, hgt, wb, ht, hc, t) ;
+        side_face_xz_cutout(wid, hgt, wb, ht, ht, ht+hc, hc, t) ;
         translate([wid,0,0])
             rotate([0,0,90]) {
                 bottom_corner_xy_square(wb, t) ;
-                corner_edge_z_square(hgt, wb, t) ;
+                corner_edge_z_square(hgt, wb, ht, ht, t) ;
             }
     }
 }
 ////-storage_left_center(wid, dep, hgt, ht, hc)-
-storage_left_center(228, 140, 60, 25, 20) ;
-//storage_left_center(238, 140, 60, 25, 20) ;  // with new side boxes
+storage_left_center(228, 140, 60, 5, 20) ;
+//storage_left_center(238, 140, 60, 5, 20) ;  // with new side boxes
