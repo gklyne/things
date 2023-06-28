@@ -11,9 +11,9 @@ module Ring(od, id, t) {
     // t    = thickness
     //
     difference() {
-        cylinder(d=od, h=t) ;
+        cylinder(d=od, h=t, $fn=48) ;
         translate([0,0,-delta])
-            cylinder(d=id, h=t+2*delta) ;
+            cylinder(d=id, h=t+2*delta, $fn=48) ;
     }
 }
 
@@ -95,7 +95,7 @@ module RingSegment(od, id, a1, a2, t) {
     // 
     intersection() {
         Ring(od, id, t) ;
-        Segment(od, a1, a2, t) ;
+        Segment(od+t, a1, a2, t) ;
     }
 }
 
@@ -153,6 +153,27 @@ module test_ring_segment() {
 // test_ring_segment() ;
 
 
+module trapezoid(l, w1, w2, t) {
+    // Tapered cuboid lying on X-Y plane, extending from origin along X-axis
+    //
+    // l    = overall length (X-dimension)
+    // w1   = width at Y-axis intersect
+    // w2   = width at other end
+    // t    = thickness (Z-dimension)
+    linear_extrude(height=t) {
+        polygon(
+            points=[
+                [0,0], 
+                [l, 0], 
+                [l, w2], 
+                [0, w1],
+                ],
+            paths=[[0,1,2,3,0]]
+        ) ;
+    }
+}
+
+
 module Contact_pad(l, w, t) {
     // Contact pad on X-Y plane, centred on Origin
     difference() {
@@ -183,32 +204,47 @@ module Contact_pad_x(l, w, t, dir=+1)
 //Contact_pad_x(20, 12.5, 5, -1) ;
 
 
-
-module Awning_brace(jaw_w, jaw_l, rad_t, wid, pad_l, pad_t) {
+module Awning_brace(jaw_w, jaw_ul, jaw_ll, rad_t, wid, pad_l, pad_t) {
     od = jaw_w + rad_t*2 ;
     // Back of clamp
     RingSegment(od, jaw_w, -90, 90, wid) ;
+
     // Jaw arms
-    for (y=[-(jaw_w+rad_t)/2,(jaw_w+rad_t)/2]) {
-        translate([-jaw_l, y-rad_t/2, 0])
-            cube(size=[jaw_l+delta, rad_t, wid]) ;
-    }
+    jaw_offset = (jaw_w+rad_t)/2 ;
+    translate([-jaw_ul, jaw_offset-rad_t/2, 0])
+        trapezoid(jaw_ul+delta, rad_t/2, rad_t, wid) ;
+    translate([-jaw_ll, -jaw_offset+rad_t/2, 0])
+        mirror(v=[0,1,0])
+            trapezoid(jaw_ll+delta, rad_t/2, rad_t, wid) ;
+        // cube(size=[jaw_ll+delta, rad_t, wid]) ;
+
     // Contact pads
-    translate([-jaw_l+pad_l/2, -jaw_w/2-delta, wid/2])
-        Contact_pad_y(pad_l, wid, pad_t, +1) ;
-    translate([-jaw_l+pad_l/2, +jaw_w/2+delta, wid/2])
-        Contact_pad_y(pad_l, wid, pad_t, -1) ;
+    // Back of clamp
     translate([0, -jaw_w/2-delta, wid/2])
         Contact_pad_y(pad_l, wid, pad_t, +1) ;
+    translate([+jaw_w/2+delta, 0, wid/2])
+        Contact_pad_x(pad_l, wid, pad_t, -1) ;
     translate([0, +jaw_w/2+delta, wid/2])
         Contact_pad_y(pad_l, wid, pad_t, -1) ;
 
-    translate([+jaw_w/2+delta, 0, wid/2])
-        Contact_pad_x(pad_l, wid, pad_t, -1) ;
-    // Clamp piece
+    // Continue support ring around back of casette
+    ax  = 15 ;
+    ax1 = atan(pad_l/jaw_w) ;
+    RingSegment(od, jaw_w, -90-ax-ax1, -90, wid) ;
+    rotate([0,0,-ax])
+        translate([0, -jaw_w/2-delta, wid/2])
+            Contact_pad_y(pad_l, wid, pad_t, +1) ;
+
+    // Jaw ends
+    translate([-jaw_ul+pad_l/2, +jaw_w/2+delta, wid/2])
+        Contact_pad_y(pad_l, wid, pad_t, -1) ;
+    translate([-jaw_ll+pad_l/2, -jaw_w/2-delta, wid/2])
+        Contact_pad_y(pad_l, wid, pad_t*2, +1) ;
+
+    // Clamp tightening
 }
 
-Awning_brace(jaw_w=150, jaw_l=75, rad_t=10, wid=5, pad_l=20, pad_t=5) ;
+Awning_brace(jaw_w=145, jaw_ul=75, jaw_ll=55, rad_t=15, wid=5, pad_l=20, pad_t=5) ;
 
 
 
