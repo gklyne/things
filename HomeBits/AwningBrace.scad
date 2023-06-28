@@ -228,23 +228,24 @@ module Awning_brace(jaw_w, jaw_ul, jaw_ll, rad_t, wid, pad_l, pad_t) {
         Contact_pad_y(pad_l, wid, pad_t, -1) ;
 
     // Continue support ring around back of casette
-    ax  = 15 ;
+    ax  = 17 ;
     ax1 = atan(pad_l/jaw_w) ;
     RingSegment(od, jaw_w, -90-ax-ax1, -90, wid) ;
     rotate([0,0,-ax])
         translate([0, -jaw_w/2-delta, wid/2])
-            Contact_pad_y(pad_l, wid, pad_t, +1) ;
+            Contact_pad_y(pad_l, wid, pad_t+1, +1) ;
 
     // Jaw ends
     translate([-jaw_ul+pad_l/2, +jaw_w/2+delta, wid/2])
         Contact_pad_y(pad_l, wid, pad_t, -1) ;
-    translate([-jaw_ll+pad_l/2, -jaw_w/2-delta, wid/2])
-        Contact_pad_y(pad_l, wid, pad_t*2, +1) ;
+    translate([-jaw_ll+pad_l/2, -jaw_w/2-1, wid/2])
+        rotate([0,0,3])
+            Contact_pad_y(pad_l, wid, pad_t*1.5, +1) ;
 
     // Clamp tightening
 }
 
-Awning_brace(jaw_w=145, jaw_ul=75, jaw_ll=55, rad_t=15, wid=5, pad_l=20, pad_t=5) ;
+Awning_brace(jaw_w=145, jaw_ul=75, jaw_ll=65, rad_t=20, wid=25, pad_l=20, pad_t=5) ;
 
 
 
