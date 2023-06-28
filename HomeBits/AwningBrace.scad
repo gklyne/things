@@ -245,7 +245,7 @@ module Awning_brace(jaw_w, jaw_ul, jaw_ll, rad_t, wid, pad_l, pad_t) {
     // Clamp tightening
 }
 
-Awning_brace(jaw_w=145, jaw_ul=75, jaw_ll=70, rad_t=20, wid=25, pad_l=20, pad_t=5) ;
+// Awning_brace(jaw_w=145, jaw_ul=75, jaw_ll=70, rad_t=20, wid=25, pad_l=20, pad_t=5) ;
 
 module Contact_wedge(pad_l, thin_end, thick_end, wedge_wid) {
     wall_h  = thick_end + 2 ;
@@ -254,12 +254,16 @@ module Contact_wedge(pad_l, thin_end, thick_end, wedge_wid) {
     wedge_a = atan2(thick_end-thin_end, pad_l) ;
     difference() {
         cube(size=[pad_l, wid, wall_h]) ;
-        rotate([0,wedge_a,0])
-            translate([-1,wall_w-clearance,(thick_end+thin_end)/2])
+        rotate([0,wedge_a,0]) {
+            translate([-2,wall_w-clearance,(thick_end+thin_end)/2])
+                cube(size=[pad_l, wedge_wid, wall_h]) ;
+            translate([-1,wall_w-clearance,(thick_end+thin_end)/2+1])
                 cube(size=[pad_l+2, wedge_wid, wall_h]) ;
+        }
     }
 }
 
+Contact_wedge(pad_l=25, thin_end=9, thick_end=11, wedge_wid=25+2*clearance) ;
 // Contact_wedge(pad_l=25, thin_end=7.5, thick_end=9.5, wedge_wid=25+2*clearance) ;
 // Contact_wedge(pad_l=25, thin_end=1, thick_end=3, wedge_wid=25+2*clearance) ;
 
