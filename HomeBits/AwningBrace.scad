@@ -255,17 +255,30 @@ module Contact_wedge(pad_l, thin_end, thick_end, wedge_wid) {
     difference() {
         cube(size=[pad_l, wid, wall_h]) ;
         rotate([0,wedge_a,0]) {
-            translate([-2,wall_w-clearance,(thick_end+thin_end)/2])
-                cube(size=[pad_l, wedge_wid, wall_h]) ;
-            translate([-1,wall_w-clearance,(thick_end+thin_end)/2+1])
+            translate([0,wall_w-clearance,(thick_end+thin_end)/2])
+                cube(size=[pad_l-2, wedge_wid, wall_h]) ;
+            translate([-2,wall_w-clearance,(thick_end+thin_end)/2+1])
                 cube(size=[pad_l+2, wedge_wid, wall_h]) ;
         }
     }
 }
 
-Contact_wedge(pad_l=25, thin_end=9, thick_end=11, wedge_wid=25+2*clearance) ;
-// Contact_wedge(pad_l=25, thin_end=7.5, thick_end=9.5, wedge_wid=25+2*clearance) ;
-// Contact_wedge(pad_l=25, thin_end=1, thick_end=3, wedge_wid=25+2*clearance) ;
+for (i=[0,1,2,3]) {
+    translate([0,i*32,0])
+        Contact_wedge(
+            pad_l=24, thin_end=i+17, thick_end=i+18, 
+            wedge_wid=25+2*clearance
+            ) ;
+}
+
+// translate([0, 0,0])
+//     Contact_wedge(pad_l=24, thin_end=16, thick_end=17, wedge_wid=25+2*clearance) ;
+// translate([0,30,0])
+// Contact_wedge(pad_l=24, thin_end=14, thick_end=15, wedge_wid=25+2*clearance) ;
+
+// Contact_wedge(pad_l=24, thin_end=9, thick_end=11, wedge_wid=25+2*clearance) ;
+// Contact_wedge(pad_l=24, thin_end=7.5, thick_end=9.5, wedge_wid=25+2*clearance) ;
+// Contact_wedge(pad_l=24, thin_end=1, thick_end=3, wedge_wid=25+2*clearance) ;
 
 
 
