@@ -212,10 +212,10 @@ module Awning_brace(jaw_w, jaw_ul, jaw_ll, rad_t, wid, pad_l, pad_t) {
     // Jaw arms
     jaw_offset = (jaw_w+rad_t)/2 ;
     translate([-jaw_ul, jaw_offset-rad_t/2, 0])
-        trapezoid(jaw_ul+delta, rad_t/2, rad_t, wid) ;
+        trapezoid(jaw_ul+delta, rad_t/3, rad_t, wid) ;
     translate([-jaw_ll, -jaw_offset+rad_t/2, 0])
         mirror(v=[0,1,0])
-            trapezoid(jaw_ll+delta, rad_t/2, rad_t, wid) ;
+            trapezoid(jaw_ll+delta, rad_t/3, rad_t, wid) ;
         // cube(size=[jaw_ll+delta, rad_t, wid]) ;
 
     // Contact pads
@@ -245,7 +245,7 @@ module Awning_brace(jaw_w, jaw_ul, jaw_ll, rad_t, wid, pad_l, pad_t) {
     // Clamp tightening
 }
 
-// Awning_brace(jaw_w=145, jaw_ul=75, jaw_ll=70, rad_t=20, wid=25, pad_l=20, pad_t=5) ;
+Awning_brace(jaw_w=145, jaw_ul=75, jaw_ll=70, rad_t=22, wid=25, pad_l=20, pad_t=5) ;
 
 module Contact_wedge(pad_l, thin_end, thick_end, wedge_wid) {
     wall_h  = thick_end + 2 ;
@@ -263,13 +263,13 @@ module Contact_wedge(pad_l, thin_end, thick_end, wedge_wid) {
     }
 }
 
-for (i=[0,1,2,3]) {
-    translate([0,i*32,0])
-        Contact_wedge(
-            pad_l=24, thin_end=i+17, thick_end=i+18, 
-            wedge_wid=25+2*clearance
-            ) ;
-}
+// for (i=[0,1,2,3]) {
+//     translate([0,i*32,0])
+//         Contact_wedge(
+//             pad_l=24, thin_end=i+17, thick_end=i+18, 
+//             wedge_wid=25+2*clearance
+//             ) ;
+// }
 
 // translate([0, 0,0])
 //     Contact_wedge(pad_l=24, thin_end=16, thick_end=17, wedge_wid=25+2*clearance) ;
