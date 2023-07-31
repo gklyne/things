@@ -1,7 +1,7 @@
 // HedgehogClip.scad
 //
 // Gutter clip for retaining a "hedgehog" debris-repelling filler.
-// Inspired by a wire-based design by David Postern.
+// Inspired by a wire-based design by David Postoern.
 //
 
 delta         = 0.01 ;
