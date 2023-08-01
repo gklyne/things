@@ -9,8 +9,8 @@ module coneslice(d1, d2, h, t) {
 }
 
 
-cylinder(d=28, h=5) ;
-cylinder(d=23, h=12) ;
+cylinder(d=30, h=4) ;
+cylinder(d=23, h=10.5) ;
 cylinder(d1=18.5, d2=18.0, h=50) ;
 for (a=[0,90]) {
 	rotate([0,0,a])	
