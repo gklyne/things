@@ -16,7 +16,7 @@ clip_ta       = 0.6 ;               // Width of triangle apex (non-zero for prin
 clip_th       = 8 ;                 // Height of cross-piece triangle
 clip_l        = gulley_w + gulley_edge_w ;
 clip_tbar_w   = 25 ;                // Width of T-bar end
-clip_tbar_d   = gulley_edge_w/2 ;   // Depth of T-bar end
+clip_tbar_d   = gulley_edge_w/2+2 ; // Depth of T-bar end
 clip_tbar_t0  = 1 ;                 // Thickness of T-bar thin end
 clip_tbar_t   = 2 ;                 // Thickness of T-bar thick end
 retainer_w    = 7 ;                 // Width of retainer
@@ -105,7 +105,7 @@ module clip_main_part(tbar_w, tbar_d, tbar_t, tbar_t0, clip_l, clip_w, clip_a, c
     rotate([0,0,-90])
         translate([-tbar_w/2,0,0])
             wedge(tbar_w, tbar_d, tbar_t0, tbar_t) ;
-    translate([tbar_d-delta,0,0])
+    translate([tbar_d-tbar_t,0,0])
         symmetric_trapezoid(tbar_t, clip_w*3, clip_w, clip_h) ;
     translate([tbar_d-delta,0,0])
         symmetric_trapezoid(clip_l-tbar_d, clip_a, clip_w, clip_h) ;
@@ -126,13 +126,13 @@ module clip_retainer() {
             translate([-delta,retainer_w/2,0])
                 rotate([0,0,-90])
                     wedge(retainer_w, retainer_lip, retainer_lip, 0) ;
-
             // Retaining clip positioning arm
             translate([0,-retainer_w/2,retainer_slider_h-retainer_t])
                 cube(size=[gulley_edge_w+retainer_lip, retainer_w, retainer_t], center=false) ;
-            translate([gulley_edge_w,retainer_w/2,retainer_slider_h-retainer_t+delta])
+            // Retaining clip positioning catch
+            translate([gulley_edge_w,clip_tw/2+1,retainer_slider_h-retainer_t+delta])
                 rotate([-90,0,-90])
-                    wedge(retainer_w, retainer_lip, retainer_lip, 0) ;
+                    wedge(clip_tw+2, retainer_lip, retainer_lip, 0) ;
         }
         translate([-retainer_d-delta,0,retainer_t-clearance*2])
             rotate([0,0,0])
