@@ -25,6 +25,8 @@ retainer_t    = 2 ;                 // Thickness of retainer cross-bar
 retainer_lip  = 1 ;                 // Width/thickness of retainer lip
 
 
+// Supporting shape definitions
+
 module triangular_prism(l, w, h) {
     // Triangular prism, centred on and extending along X-axis,
     // with the apex down
@@ -77,6 +79,7 @@ module symmetric_trapezoid(l, w1, w2, h) {
 ////-Test symmetric_trapezoid(l, w1, w2, t)
 // symmetric_trapezoid(50, 2, 4, 8) ;
 
+
 module wedge(l,w,t0,t1) {
     // Wedge with edge lying on and extending on the X-axis, 
     // tapering along the Y axis.
@@ -101,6 +104,32 @@ module wedge(l,w,t0,t1) {
 // wedge(100,10,2,1) ;
 // wedge(20,2,2,0) ;
 
+
+module sawtooth_rack(l, w, t, p) {
+    // Sawtooth rack centred on +ve X-axis.
+    // Teeth are on upper side, with vertical edge facing towards -X, and 45-degree slope facing +X.
+    // Bottom of teeth are on X-Y plane.
+    //
+    // l = overall length of rack
+    // w = width of rack
+    // t = thickness of rack, not including teeth
+    // p = pitch and depth of teeth
+    //
+    nt = floor(l/p) ;   // Number of teeth
+    translate([0,-w/2,-t])
+        cube(size=[l,w,t]) ;
+    for (n = [1:nt]) {
+        translate([l-n*p,w/2,-delta])
+           rotate([0,0,-90])
+               wedge(w, p, p, 0) ;
+    }
+}
+////-Test sawtooth_rack(l, w, t, p)
+// sawtooth_rack(10, 5, 1, 1) ;
+
+
+// Hedgehog clip definition
+
 module clip_main_part(tbar_w, tbar_d, tbar_t, tbar_t0, clip_l, clip_w, clip_a, clip_h) {
     rotate([0,0,-90])
         translate([-tbar_w/2,0,0])
@@ -111,11 +140,23 @@ module clip_main_part(tbar_w, tbar_d, tbar_t, tbar_t0, clip_l, clip_w, clip_a, c
         symmetric_trapezoid(clip_l-tbar_d, clip_a, clip_w, clip_h) ;
 }
 ////-Test clip_main_part(tbar_w,tbar_d,tbar_t0,clip_l,clip_w,clip_t)
-clip_main_part(clip_tbar_w, clip_tbar_d, clip_tbar_t, clip_tbar_t0, clip_l, clip_tw, clip_ta, clip_th) ;
+//clip_main_part(clip_tbar_w, clip_tbar_d, clip_tbar_t, clip_tbar_t0, clip_l, clip_tw, clip_ta, clip_th) ;
+
+
+module clip_main_toothed(tbar_w, tbar_d, tbar_t, tbar_t0, clip_l, clip_w, clip_a, clip_h, tooth_p) {
+    difference() {
+        clip_main_part(tbar_w, tbar_d, tbar_t, tbar_t0, clip_l, clip_w, clip_a, clip_h) ;
+        translate([clip_l*0.75+delta,0,clip_h])
+            mirror([0,0,1])
+                sawtooth_rack(clip_l*0.25, clip_w+2*delta, 1, tooth_p) ;
+
+    }
+}
+////-test clip_main_toothed(tbar_w, tbar_d, tbar_t, tbar_t0, clip_l, clip_w, clip_a, clip_h, tooth_p)
+clip_main_toothed(clip_tbar_w, clip_tbar_d, clip_tbar_t, clip_tbar_t0, clip_l, clip_tw, clip_ta, clip_th, retainer_lip) ;
 
 
 retainer_slider_h = clip_th+retainer_t*2 ;
-
 module clip_retainer() {
     difference() {
         union() {
