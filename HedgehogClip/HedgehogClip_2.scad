@@ -22,7 +22,7 @@ clip_tbar_t   = 2 ;                 // Thickness of T-bar thick end
 retainer_w    = 7 ;                 // Width of retainer
 retainer_d    = 8 ;                 // Depth of retainer
 retainer_t    = 2 ;                 // Thickness of retainer cross-bar
-retainer_lip  = 1 ;                 // Width/thickness of retainer lip
+retainer_lip  = 2 ;                 // Width/thickness of retainer lip
 
 
 // Supporting shape definitions
@@ -153,7 +153,7 @@ module clip_main_toothed(tbar_w, tbar_d, tbar_t, tbar_t0, clip_l, clip_w, clip_a
     }
 }
 ////-test clip_main_toothed(tbar_w, tbar_d, tbar_t, tbar_t0, clip_l, clip_w, clip_a, clip_h, tooth_p)
-clip_main_toothed(clip_tbar_w, clip_tbar_d, clip_tbar_t, clip_tbar_t0, clip_l, clip_tw, clip_ta, clip_th, retainer_lip) ;
+clip_main_toothed(clip_tbar_w, clip_tbar_d, clip_tbar_t, clip_tbar_t0, clip_l, clip_tw, clip_ta, clip_th, retainer_lip/3) ;
 
 
 retainer_slider_h = clip_th+retainer_t*2 ;
@@ -169,11 +169,11 @@ module clip_retainer() {
                     wedge(retainer_w, retainer_lip, retainer_lip, 0) ;
             // Retaining clip positioning arm
             translate([0,-retainer_w/2,retainer_slider_h-retainer_t])
-                cube(size=[gulley_edge_w+retainer_lip, retainer_w, retainer_t], center=false) ;
+                cube(size=[gulley_edge_w+retainer_lip/3, retainer_w, retainer_t], center=false) ;
             // Retaining clip positioning catch
             translate([gulley_edge_w,clip_tw/2+1,retainer_slider_h-retainer_t+delta])
                 rotate([-90,0,-90])
-                    wedge(clip_tw+2, retainer_lip, retainer_lip, 0) ;
+                    wedge(clip_tw+2, retainer_lip/3, retainer_lip/3, 0) ;
         }
         translate([-retainer_d-delta,0,retainer_t-clearance*2])
             rotate([0,0,0])
@@ -183,11 +183,6 @@ module clip_retainer() {
                     clip_tw+clearance*2, 
                     clip_th+clearance*2
                     ) ;
-                ////trapezoid_45_prism(
-                ////    retainer_d+retainer_lip+delta, 
-                ////    clip_w+clearance*2, 
-                ////    clip_t+retainer_lip+delta
-                ////) ;
     }
 }
 ////-Test clip_retainer()
