@@ -239,7 +239,7 @@ module clip_retainer_toothed_part() {
 }
 
 // For assembly viewing:
-translate([clip_l+clip_tbar_d+5,0,-retainer_lip-retainer_gap]) clip_retainer_toothed_part() ;
+// translate([clip_l+clip_tbar_d+5,0,-retainer_lip-retainer_gap]) clip_retainer_toothed_part() ;
 
 // For printing with common baseline and no overhang
-//translate([clip_l+clip_tbar_d+5,0,retainer_slider_h]) mirror([0,0,1]) clip_retainer_toothed_part() ;
+translate([clip_l+clip_tbar_d+5,0,retainer_slider_h]) mirror([0,0,1]) clip_retainer_toothed_part() ;
