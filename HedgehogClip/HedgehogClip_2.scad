@@ -6,24 +6,25 @@
 // Take 2 with narrower, triangular cross piece
 //
 
-delta         = 0.01 ;
-clearance     = 0.1 ;
+delta           = 0.01 ;
+clearance       = 0.1 ;
 
-gulley_w      = 50 ;
-gulley_edge_w = 10 ;   
-clip_tw       = 3 ;                 // Width of cross-piece triangle
-clip_ta       = 0.6 ;               // Width of triangle apex (non-zero for printing)
-clip_th       = 8 ;                 // Height of cross-piece triangle
-clip_l        = gulley_w + gulley_edge_w ;
-clip_tbar_w   = 25 ;                // Width of T-bar end
-clip_tbar_d   = gulley_edge_w/2+2 ; // Depth of T-bar end
-clip_tbar_t0  = 1 ;                 // Thickness of T-bar thin end
-clip_tbar_t   = 2 ;                 // Thickness of T-bar thick end
-retainer_w    = 7 ;                 // Width of retainer
-retainer_d    = 8 ;                 // Depth of retainer
-retainer_t    = 2 ;                 // Thickness of retainer cross-bar
-retainer_lip  = 2 ;                 // Width/thickness of retainer lip
-
+gulley_w        = 50 ;
+gulley_edge_w   = 10 ;   
+clip_tw         = 3 ;                 // Width of cross-piece triangle
+clip_ta         = 0.6 ;               // Width of triangle apex (non-zero for printing)
+clip_th         = 8 ;                 // Height of cross-piece triangle
+clip_l          = gulley_w + gulley_edge_w ;
+clip_tbar_w     = 25 ;                // Width of T-bar end
+clip_tbar_d     = gulley_edge_w/2+2 ; // Depth of T-bar end
+clip_tbar_t0    = 1 ;                 // Thickness of T-bar thin end
+clip_tbar_t     = 2 ;                 // Thickness of T-bar thick end
+retainer_w      = 7 ;                 // Width of retainer
+retainer_d      = 8 ;                 // Depth of retainer
+retainer_t      = 1.5 ;                 // Thickness of retainer cross-bar
+retainer_lip    = 2 ;                 // Width/thickness of retainer lip
+retainer_catch  = retainer_lip/2 ;    // Size of retainer end catch 
+retainer_tooth  = retainer_lip/3 ;    // Size of retainer teeth
 
 // Supporting shape definitions
 
@@ -146,47 +147,86 @@ module clip_main_part(tbar_w, tbar_d, tbar_t, tbar_t0, clip_l, clip_w, clip_a, c
 module clip_main_toothed(tbar_w, tbar_d, tbar_t, tbar_t0, clip_l, clip_w, clip_a, clip_h, tooth_p) {
     difference() {
         clip_main_part(tbar_w, tbar_d, tbar_t, tbar_t0, clip_l, clip_w, clip_a, clip_h) ;
-        translate([clip_l*0.75+delta,0,clip_h])
+        translate([clip_l*0.75,0,clip_h])
             mirror([0,0,1])
                 sawtooth_rack(clip_l*0.25, clip_w+2*delta, 1, tooth_p) ;
 
     }
 }
 ////-test clip_main_toothed(tbar_w, tbar_d, tbar_t, tbar_t0, clip_l, clip_w, clip_a, clip_h, tooth_p)
-clip_main_toothed(clip_tbar_w, clip_tbar_d, clip_tbar_t, clip_tbar_t0, clip_l, clip_tw, clip_ta, clip_th, retainer_lip/3) ;
+clip_main_toothed(clip_tbar_w, clip_tbar_d, clip_tbar_t, clip_tbar_t0, clip_l, clip_tw, clip_ta, clip_th, retainer_tooth) ;
 
 
-retainer_slider_h = clip_th+retainer_t*2 ;
-module clip_retainer() {
+module clip_retainer(body_d, body_w, body_h, body_tw, body_th, body_ta, arm_l, arm_w, arm_t, lip, catch) {
     difference() {
         union() {
             // Retaining clip slider body
-            translate([-retainer_d+delta,-retainer_w/2,0])
-                cube(size=[retainer_d, retainer_w, retainer_slider_h], center=false) ;
+            translate([-body_d+delta,-body_w/2,0])
+                cube(size=[body_d, body_w, body_h], center=false) ;
             // Retaining clip gulley edge hook
-            translate([-delta,retainer_w/2,0])
+            translate([-delta,body_w/2,0])
                 rotate([0,0,-90])
-                    wedge(retainer_w, retainer_lip, retainer_lip, 0) ;
+                    wedge(body_w, lip, lip, 0) ;
             // Retaining clip positioning arm
-            translate([0,-retainer_w/2,retainer_slider_h-retainer_t])
-                cube(size=[gulley_edge_w+retainer_lip/3, retainer_w, retainer_t], center=false) ;
+            translate([0,-arm_w/2,body_h-arm_t])
+                cube(size=[arm_l, arm_w, arm_t], center=false) ;
             // Retaining clip positioning catch
-            translate([gulley_edge_w,clip_tw/2+1,retainer_slider_h-retainer_t+delta])
+            translate([arm_l-catch,arm_w/2,body_h-arm_t+delta])
                 rotate([-90,0,-90])
-                    wedge(clip_tw+2, retainer_lip/3, retainer_lip/3, 0) ;
+                    wedge(arm_w, catch, catch, 0) ;
         }
-        translate([-retainer_d-delta,0,retainer_t-clearance*2])
+        translate([-body_d-delta,0,lip-clearance*2])
             rotate([0,0,0])
                 symmetric_trapezoid(
-                    retainer_d+retainer_lip+delta, 
-                    clip_ta+clearance*2, 
-                    clip_tw+clearance*2, 
-                    clip_th+clearance*2
+                    body_d+lip+delta*2, 
+                    body_ta+clearance*2, 
+                    body_tw+clearance*2, 
+                    body_th+clearance*2
                     ) ;
     }
 }
-////-Test clip_retainer()
+
+////-Test clip_retainer(body_d, body_w, body_h, body_tw, body_th, body_ta, arm_l, arm_w, arm_t, lip, catch)
+retainer_slider_h = clip_th+retainer_t+retainer_lip ;
+module clip_retainer_part() {
+    clip_retainer(
+        retainer_d, retainer_w, retainer_slider_h,
+        clip_tw, clip_th, clip_ta,
+        gulley_edge_w+retainer_tooth, clip_tw+2, retainer_t, 
+        retainer_lip, retainer_catch
+    ) ;    
+}
+
 // For assembly viewing:
-translate([clip_l+clip_tbar_d+5,0,-retainer_t]) clip_retainer() ;
+// translate([clip_l+clip_tbar_d+5,0,-retainer_lip]) clip_retainer_part() ;
+
 // For printing with common baseline and no overhang
-// translate([clip_l+clip_tbar_d+5,0,retainer_slider_h]) mirror([0,0,1]) clip_retainer() ;
+// translate([clip_l+clip_tbar_d+5,0,retainer_slider_h]) mirror([0,0,1]) clip_retainer_part() ;
+
+
+
+module clip_retainer_toothed(body_d, body_w, body_h, body_tw, body_th, body_ta, arm_l, arm_w, arm_t, lip, tooth_p) {
+    rack_l = tooth_p*3 ;
+    clip_retainer(body_d, body_w, body_h, body_tw, body_th, body_ta, arm_l, arm_w, arm_t, lip, 0) ;
+    translate([arm_l-rack_l,0,body_h-arm_t])
+        mirror([0,0,1])
+            sawtooth_rack(rack_l, arm_w, 1, tooth_p) ;
+
+
+
+}
+////-Test clip_retainer_toothed(body_d, body_w, body_h, body_tw, body_th, body_ta, arm_l, arm_w, arm_t, lip, tooth_p)
+module clip_retainer_toothed_part() {
+    clip_retainer_toothed(
+        retainer_d, retainer_w, retainer_slider_h,
+        clip_tw, clip_th, clip_ta,
+        gulley_edge_w, clip_tw+2, retainer_t, 
+        retainer_lip, retainer_tooth
+    ) ;    
+}
+
+// For assembly viewing:
+//translate([clip_l+clip_tbar_d+5,0,-retainer_lip]) clip_retainer_toothed_part() ;
+
+// For printing with common baseline and no overhang
+translate([clip_l+clip_tbar_d+5,0,retainer_slider_h]) mirror([0,0,1]) clip_retainer_toothed_part() ;
