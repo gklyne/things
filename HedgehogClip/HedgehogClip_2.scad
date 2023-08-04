@@ -10,8 +10,8 @@ delta           = 0.01 ;
 clearance       = 0.2 ;
 
 gulley_w        = 50 ;
-gulley_edge_w   = 10 ;   
-clip_tw         = 3 ;                 // Width of cross-piece triangle
+gulley_edge_w   = 12 ;   
+clip_tw         = 4 ;                 // Width of cross-piece triangle
 clip_ta         = 1.0 ;               // Width of triangle apex (non-zero for printing)
 clip_th         = 8 ;                 // Height of cross-piece triangle
 clip_l          = gulley_w + gulley_edge_w ;
@@ -19,7 +19,7 @@ clip_tbar_w     = 25 ;                // Width of T-bar end
 clip_tbar_d     = gulley_edge_w/2+2 ; // Depth of T-bar end
 clip_tbar_t0    = 1 ;                 // Thickness of T-bar thin end
 clip_tbar_t     = 2 ;                 // Thickness of T-bar thick end
-retainer_w      = 7 ;                 // Width of retainer
+retainer_w      = 8 ;                 // Width of retainer
 retainer_d      = 8 ;                 // Depth of retainer
 retainer_t      = 1.5 ;               // Thickness of retainer cross-bar
 retainer_lip    = 2.4 ;               // Width/thickness of retainer lip
@@ -227,7 +227,7 @@ module clip_retainer_toothed_part() {
 }
 
 // For assembly viewing:
-translate([clip_l+clip_tbar_d+5,0,-retainer_lip-retainer_gap]) clip_retainer_toothed_part() ;
+//translate([clip_l+clip_tbar_d+5,0,-retainer_lip-retainer_gap]) clip_retainer_toothed_part() ;
 
 // For printing with common baseline and no overhang
-//translate([clip_l+clip_tbar_d+5,0,retainer_slider_h]) mirror([0,0,1]) clip_retainer_toothed_part() ;
+translate([clip_l+clip_tbar_d+5,0,retainer_slider_h]) mirror([0,0,1]) clip_retainer_toothed_part() ;
