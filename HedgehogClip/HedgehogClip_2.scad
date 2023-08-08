@@ -7,13 +7,14 @@
 //
 
 delta           = 0.01 ;
-clearance       = 0.16 ;
+clearance       = 0.10 ;
 
 gulley_w        = 80 ;
 gulley_edge_w   = 12 ;   
 clip_tw         = 4 ;                   // Width of cross-piece triangle
 clip_ta         = 1.0 ;                 // Width of triangle apex (non-zero for printing)
 clip_th         = 8 ;                   // Height of cross-piece triangle
+clip_thx        = 8.5 ;                 // Height of triangle hole in retainer
 clip_l          = gulley_w + gulley_edge_w ;
 clip_tbar_w     = 25 ;                  // Width of T-bar end
 clip_tbar_d     = gulley_edge_w/2+2 ;   // Depth of T-bar end
@@ -25,8 +26,8 @@ retainer_t      = 1.5 ;                 // Thickness of retainer cross-bar
 retainer_lip    = 2.4 ;                 // Width/thickness of retainer lip
 retainer_gap    = 2.0 ;                 // Gap between edge and cross-piece
 retainer_catch  = retainer_lip/2 ;      // Size of retainer end catch 
-retainer_tooth  = 1.0 ;                 // Size of retainer teeth
-retainer_pitch  = retainer_tooth*1.25 ;  // Pitch of retainer teeth
+retainer_tooth  = 1.25 ;                // Size of retainer teeth
+retainer_pitch  = retainer_tooth*1.25 ; // Pitch of retainer teeth
 
 // Supporting shape definitions
 
@@ -200,11 +201,11 @@ module clip_retainer(body_d, body_w, body_h, body_tw, body_th, body_ta, arm_l, a
 }
 
 ////-Test clip_retainer(body_d, body_w, body_h, body_tw, body_th, body_ta, arm_l, arm_w, arm_t, lip, gap, catch)
-retainer_slider_h = clip_th+retainer_t+retainer_lip+retainer_gap+clearance*2 ;
+retainer_slider_h = clip_thx+retainer_t+retainer_lip+retainer_gap+clearance*2 ;
 module clip_retainer_part() {
     clip_retainer(
         retainer_d, retainer_w, retainer_slider_h,
-        clip_tw, clip_th, clip_ta,
+        clip_tw, clip_thx, clip_ta,
         gulley_edge_w+retainer_tooth, clip_tw+2, retainer_t, 
         retainer_lip, retainer_gap, retainer_catch
     ) ;    
@@ -232,7 +233,7 @@ module clip_retainer_toothed(body_d, body_w, body_h, body_tw, body_th, body_ta, 
 module clip_retainer_toothed_part() {
     clip_retainer_toothed(
         retainer_d, retainer_w, retainer_slider_h,
-        clip_tw, clip_th, clip_ta,
+        clip_tw, clip_thx, clip_ta,
         gulley_edge_w, clip_tw+2, retainer_t, 
         retainer_lip, retainer_gap, retainer_tooth, retainer_pitch
     ) ;    
