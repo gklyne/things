@@ -92,12 +92,12 @@ module wireclip(cd, ct, cl, hd, ht) {
     hl2 = cl/24 ;
     difference() {
         tube(cd, ct, cl) ;
-        translate([0,cd*0.5,-delta])
+        translate([0,cd*0.7,-delta])
             cylinder(d=cd+ct*2, cl+2*delta, $fn=16) ;
     }
     // For better bed adhesion
-    translate([-cd/2,-cd*0.1,0])
-        cube(size=[cd,cd*0.2,0.2]) ;
+    translate([-cd/2,-cd*0.2,0])
+        cube(size=[cd,cd*0.4,0.2]) ;
     // Wire retainer
     translate([cd/2+hd/2+ct,0,0]) {
         translate([0,0,0])
@@ -113,9 +113,9 @@ module wireclip(cd, ct, cl, hd, ht) {
     }
 }
 ////-wireclip(cd, ct, cl, hd, ht)-
-wireclip(22, 1.5, 40, 7.5, 1) ;
+//// wireclip(22, 1.6, 40, 7.5, 1) ;
 //// translate([0,20,0])
-////     wireclip(10, 1.2, 32, 6, 1) ;
+wireclip(10, 1.2, 32, 6, 1) ;
 
 
 
