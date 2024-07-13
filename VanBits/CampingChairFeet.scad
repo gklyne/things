@@ -110,7 +110,7 @@ module ball_joint_ball(d, bt, sd, sh) {
 //// translate([80,0,0])
 ////     ball_joint_ball(20, 2, 20*0.5, 2) ;
 
-// Ball joint - ball, with inner hollowed for stringer build (inner wall)
+// Ball joint - ball, with inner hollowed for stronger build (inner wall)
 module ball_joint__ball_hollowed(d, bt, sd, sh) {
     difference() {
         ball_joint_ball(d, bt, sd, sh) ;
@@ -134,16 +134,16 @@ module ball_joint_socket(d, bt, st, sh, cw) {
     //
     sd = d+2*st ;   // Diameter of socket outer housing
     difference() {
-        pointed_cylinder(sd, sh+bt) ;
+        pointed_cylinder(sd, sh+bt) ;   
         //rounded_cylinder(sd, sh+bt) ;
         // translate([0,0,-delta])
         //     rounded_cylinder(d, sh+bt+delta) ;   // Hollow out inside
         translate([0,0,sh])
             sphere(d=d, $fn=24) ;                   // Ball socket
-        translate([0,0,sh+d*0.4])
+        translate([0,0,sh+d*0.5])
             sphere(d=d, $fn=24) ;                   // Flare entry
-        translate([-sd/2,-sd/2,sh+bt+d*0.1])
-            cube(size=[sd,sd,sd]) ;                 // remove top of socket
+        translate([-sd/2,-sd/2,sh+bt+d*0.2])
+            cube(size=[sd,sd,sd]) ;                 // Remove top of socket
         translate([0,0,sh]) {
             rotate([0,0,0])
                 rounded_cutout(sd+2*delta, sd, cw) ;
@@ -164,19 +164,30 @@ module ball_end_fitting(d, bt, sd, sh, fl, fd, ft) {
     // sd   = diameter of stalk
     // sh   = height of stalk
     // fl   = length of fitting over leg
-    // fd   = leg fitting hole diameter=
+    // fd   = leg fitting hole diameter
     // ft   = thickness of fitting over leg
     //
-    rsd  = m3 ;
-    rsaf = m3_nut_af ;
+    rsd  = m3 ;             // Reinforcing screw diameter
+    rsaf = m3_nut_af ;      // Reinforcing screw nut A/F
+    rst  = m3_nut_t ;       // Reinforcing screw nut thickness
+    rspr = d/2+rsaf/2 ;     // Reinforcing screws pitch circle radius
     difference() {
         union () {
+            // Ball and stalk
             translate([0,0,fl])
                 ball_joint_ball(d, bt, sd, sh) ;
+            // Sleeve to Fit over chair leg
             translate([0,0,0])
                 cylinder(d=fd+2*ft, h=fl+bt, $fn=24) ;
+            // Outer housing for reinforcing screw
+            for ( a=[0,120,240] ) {
+                rotate([0,0,a]) {
+                    translate([rspr,0,0])
+                        cylinder(d=rsd*2.5, h=fl+bt, $fn=16) ;                
+                }
+            }
         }
-        // Remove for fitting over leg
+        // Remove ribbed hole for fitting over leg
         translate([0,0,-bt-1])
             leg_fitting_socket(fd, fl) ;
         // Hole for reinforcing screw and countersink head
@@ -186,8 +197,31 @@ module ball_end_fitting(d, bt, sd, sh, fl, fd, ft) {
         // Top recess for nut
         translate([0,0,fl+bt+sh+d*0.7])
             nut_recess_Z(rsaf+clearance, d*0.3) ;
+        // Holes for fitting reinforcement screws
+        translate([0,0,0])
+            for ( a=[0,120,240] ) {
+                rotate([0,0,a]) {
+                    translate([rspr,0,fl+bt+delta])
+                        // module countersinkZ(od, oh, sd, sh)
+                        countersinkZ(rsd*2, fl+bt+2*delta, rsd, fl+bt) ;
+                    translate([rspr,0,-delta])
+                        rotate([0,0,30])
+                        nut_recess_Z(rsaf+clearance, rst*1.5) ;
+                }
+            }
+
+
     }
 }
+
+
+// od = overall diameter (for screw head)
+// oh = overall height (screw + head + recess)
+// sd = screw diameter
+// sh = screw height (to top of countersink)
+//
+
+
 
 
 // Foot plate with ball joint to swivel on ball end of chair leg
@@ -210,9 +244,9 @@ module ball_socket_foot_plate(d, bt, st, sh, cw, fd) {
     // Support webbing...
     for( a = [0+45,90+45,180+45,270+45]) {
         rotate([0,0,a]) {
-            translate([d*0.5+st*0.8,0,bt-delta])
+            translate([d*0.5+st*0.5,0,bt-delta])
                 rotate([90,0,0])
-                    web_base((fd-d)*0.5-st, sh, bt) ;
+                    web_base((fd-d)*0.5-st, sh+d*0.2, bt) ;
         }
     }
 }
@@ -220,20 +254,20 @@ module ball_socket_foot_plate(d, bt, st, sh, cw, fd) {
 
 // Print objects
 
-ball_d  = 14 ;
-base_t  = 3 ;
-stalk_d = ball_d*0.56 ;
-sock_t  = 2.5 ;
-fit_l   = 22 ;
-fit_d   = 12.5 ;
-fit_t   = 2 ;
-foot_d  = 50 ;
+ball_d  = 15 ;              // Diameter of ball/socket
+base_t  = 3 ;               // Thickness of socket base (foot)
+stalk_d = ball_d*0.55 ;     // Diameter of ball stalk
+sock_t  = 2.8 ;             // Thickness of ball socket shell
+fit_l   = 22 ;              // Length of ball end fitting over leg
+fit_d   = 12.5 ;            // Inside diameter ball end fitting over leg
+fit_t   = 3 ;             // Thickness of ball end fitting over leg
+foot_d  = 52 ;              // Diameter of foot
 
 // ball_joint_socket(ball_d, base_t, sock_t, ball_d/2, stalk_d+0.5) ;
 // translate([ball_d*2,0,0])
 //     ball_joint__ball_hollowed(ball_d-clearance, base_t, stalk_d, base_t) ;
 
-ball_socket_foot_plate(ball_d, base_t, sock_t, ball_d/2+1, stalk_d+0.2, foot_d) ;
+ball_socket_foot_plate(ball_d, base_t, sock_t, ball_d/2+base_t/2, stalk_d+0.1, foot_d) ;
 translate([foot_d,0,0])
     ball_end_fitting(ball_d, base_t, stalk_d, base_t, fit_l, fit_d, fit_t) ;
 
