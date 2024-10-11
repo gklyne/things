@@ -243,6 +243,7 @@ module ball_socket_foot_plate(d, bt, st, sh, cw, fd) {
 
 
 // Simple cap end for chair leg
+// (Used for shower stool feet)
 module cap_end(fl, fd, ft) {
     // Base on X-Y plane origin, ball on Z-axis
     //
@@ -266,6 +267,8 @@ module cap_end(fl, fd, ft) {
 }
 ////-cap_end(bt, fl, fd, ft)-
 //// cap_end(25, 19, 2) ;
+
+////-ShowerStoolFeet-
 for ( xo = [-40,0,40] ) {
     translate([xo, 0, 0])
         cap_end(25, 19, 2) ;    
