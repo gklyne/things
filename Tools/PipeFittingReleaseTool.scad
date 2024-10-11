@@ -78,10 +78,7 @@ module pipe_fitting_release_tool(td, tl, tt, fl, fw, ft) {
 }
 
 // Parameters for 3/8" (9.5mm) pipe diameter
-
-
-
-
-
 pipe_fitting_release_tool(td=10, tl=10, tt=2, fl=40, fw=17.5, ft=2) ;
 
+
+// End.
