@@ -1,7 +1,9 @@
+// Torus.scad
+
 module torus(ir, rr) {
 	// Torus centred on origin.
 	//
-	// ir 		inside (hole) radoius
+	// ir 		inside (hole) radius
 	// rr 		rim radius
 	//
 	rotate_extrude($fn=64) {

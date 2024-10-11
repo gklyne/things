@@ -198,7 +198,7 @@ module ball_end_fitting(d, bt, sd, sh, fl, fd, ft) {
         translate([0,0,fl+bt+sh+d*0.7])
             nut_recess_Z(rsaf+clearance, d*0.3) ;
         // Holes for fitting reinforcement screws
-        translate([0,0,0])
+        translate([0,0,0]) {
             for ( a=[0,120,240] ) {
                 rotate([0,0,a]) {
                     translate([rspr,0,fl+bt+delta])
@@ -209,19 +209,9 @@ module ball_end_fitting(d, bt, sd, sh, fl, fd, ft) {
                         nut_recess_Z(rsaf+clearance, rst*1.5) ;
                 }
             }
-
-
+        }
     }
 }
-
-
-// od = overall diameter (for screw head)
-// oh = overall height (screw + head + recess)
-// sd = screw diameter
-// sh = screw height (to top of countersink)
-//
-
-
 
 
 // Foot plate with ball joint to swivel on ball end of chair leg
@@ -252,6 +242,36 @@ module ball_socket_foot_plate(d, bt, st, sh, cw, fd) {
 }
 
 
+// Simple cap end for chair leg
+module cap_end(fl, fd, ft) {
+    // Base on X-Y plane origin, ball on Z-axis
+    //
+    // fl   = length of fitting over leg
+    // fd   = leg fitting hole diameter
+    // ft   = thickness of fitting over leg
+    //
+    difference() {
+        union () {
+            // Sleeve to Fit over chair leg
+            translate([0,0,0])
+                cylinder(d=fd+2*ft, h=fl, $fn=24) ;
+            // Rounded end
+            translate([0,0,fl])
+                sphere(d=fd+6*ft, $fn=24) ;
+        }
+        // Remove ribbed hole for fitting over leg
+        translate([0,0,-delta])
+            leg_fitting_socket(fd, fl) ;
+        }
+}
+////-cap_end(bt, fl, fd, ft)-
+//// cap_end(25, 19, 2) ;
+for ( xo = [-40,0,40] ) {
+    translate([xo, 0, 0])
+        cap_end(25, 19, 2) ;    
+}
+
+
 // Print objects
 
 ball_d  = 15 ;              // Diameter of ball/socket
@@ -267,7 +287,7 @@ foot_d  = 52 ;              // Diameter of foot
 // translate([ball_d*2,0,0])
 //     ball_joint__ball_hollowed(ball_d-clearance, base_t, stalk_d, base_t) ;
 
-ball_socket_foot_plate(ball_d, base_t, sock_t, ball_d/2+base_t/2, stalk_d+0.1, foot_d) ;
-translate([foot_d,0,0])
-    ball_end_fitting(ball_d, base_t, stalk_d, base_t, fit_l, fit_d, fit_t) ;
+// ball_socket_foot_plate(ball_d, base_t, sock_t, ball_d/2+base_t/2, stalk_d+0.1, foot_d) ;
+// translate([foot_d,0,0])
+//     ball_end_fitting(ball_d, base_t, stalk_d, base_t, fit_l, fit_d, fit_t) ;
 
