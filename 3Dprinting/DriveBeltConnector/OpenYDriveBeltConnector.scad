@@ -2,7 +2,7 @@
 
 use <../ShapeLibrary/Chamfer.scad>
 use <../ShapeLibrary/Teardrop.scad>
-use <../ShapeLibrary/NutRecess.scad>
+use <../ShapeLibrary/NutRecessCS.scad>
 //use <../ShapeLibrary/CounterSink.scad>
 use <DriveBeltConnector.scad>
 
@@ -35,7 +35,7 @@ module OpenYBeltConnectorPlate(l, w, d,  bw, bd,  hpx, hpy, hd,  naf, nt)
                 {
                     translate([0, 0, nt]) 
                         mirror([0,0,1])
-                            nutrecessZ(naf, d*3, 3, d*2);
+                            nutrecessZcs(naf, d*3, 3, d*2);
                     TeardropZ(d, 3, 1);
                 }
             }

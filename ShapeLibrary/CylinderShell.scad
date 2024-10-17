@@ -1,7 +1,7 @@
 // Cylinder shell
 
 // Cylinder shell on X-Y plane, centred on Z axis,
-// with outside ddameter, shell thickness t and height h
+// with outside diameter, shell thickness t and height h
 module CylinderShell(d, t, h)
 {
   difference()

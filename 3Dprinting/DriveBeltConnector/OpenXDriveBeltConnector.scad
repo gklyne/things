@@ -1,6 +1,6 @@
 // Drive belt connector
 
-use <../ShapeLibrary/NutRecessNoCS.scad>
+use <../ShapeLibrary/NutRecess.scad>
 use <../ShapeLibrary/CounterSink.scad>
 
 // Tooth profile, tooth centred on origin

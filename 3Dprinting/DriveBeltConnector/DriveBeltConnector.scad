@@ -1,6 +1,6 @@
 // Drive belt connector
 
-use <../ShapeLibrary/NutRecess.scad>
+use <../ShapeLibrary/NutRecessCS.scad>
 use <../ShapeLibrary/CounterSink.scad>
 
 // Tooth profile, tooth centred on origin
@@ -65,7 +65,7 @@ module ToothProfileX(l, w)
 // hpy = hole pitch Y
 // hd  = hole diameter (countersink width twice this)
 // naf = nut across faces size
-// nt  = niut thickness
+// nt  = nut thickness
 //
 module BeltConnectorBase(l, w, d,  bw, bd,  hpx, hpy, hd,  naf, nt)
 {
@@ -79,7 +79,7 @@ module BeltConnectorBase(l, w, d,  bw, bd,  hpx, hpy, hd,  naf, nt)
             {
                 translate([xo, yo, nt]) 
                     mirror([0,0,1])
-                        nutrecessZ(naf, d*3, 3, d*2);
+                        nutrecessZcs(naf, d*3, 3, d*2);
             }
         }
     }
