@@ -28,6 +28,9 @@ pip-log.txt
 
 
 # 3D printing
+Tools/**/*.stl
+Toys/**/*.stl
+Zip
 *.gcode
 
 #system and general
