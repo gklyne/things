@@ -83,10 +83,13 @@ module LightPullCordLock(d1, d2, h, t1, t2, cd) {
     difference() {
         truncated_cone_shell(d=d1, h=ha, t=t2, tt=ha-h+2, tb=shift_z+4) ;
             // Cross holes
-            translate([0,0,hl*0.6])
+            translate([0,0,hl*0.65])
                 rotate([0,90,0])
                     cylinder(d=cd,h=d1,center=true,$fn=8) ;
-            translate([0,0,hl*0.2])
+            translate([0,0,hl*0.4])
+                rotate([0,90,0])
+                    cylinder(d=cd,h=d1,center=true,$fn=8) ;
+            translate([0,0,hl*0.15])
                 rotate([0,90,0])
                     cylinder(d=cd,h=d1,center=true,$fn=8) ;
             // Grooves for cord
@@ -100,5 +103,5 @@ module LightPullCordLock(d1, d2, h, t1, t2, cd) {
 }
 
 ////-LightPullCordLock(d1, d2, h, cd)
-translate([0*30,0,0]) LightPullCordLock(d1=25, d2=5, h=25, t1=1, t2=2.6, cd=3) ;
+translate([0*30,0,0]) LightPullCordLock(d1=25, d2=5, h=25, t1=1, t2=3, cd=3) ;
 
